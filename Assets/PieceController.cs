@@ -15,10 +15,9 @@ public class PieceController : MonoBehaviour {
 		
 	}
     public void SetGameState(byte val)
-
     {
         if(!view) view = gameObject.GetComponent<MeshRenderer>();
-        if (isGhost) print(val + " player");
+        //if (isGhost) print(val + " player");
         switch (val)
         {
             case 0:

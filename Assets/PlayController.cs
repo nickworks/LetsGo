@@ -5,31 +5,52 @@ using UnityEngine;
 public class PlayController : MonoBehaviour {
 
     class Stone {
+        public Stone(byte x, byte y)
+        {
+            this.x = x;
+            this.y = y;
+        }
         public byte x;
         public byte y;
-        public byte val;
-        public bool inGroup;
+        public byte val = 0;
+        public bool inGroup = false;
     }
-    struct GroupOfStones
+    class GroupOfStones
     {
-        Stone[] stones;
-        Stone[] liberties;
-        int val;
-        int countLiberties { get { return liberties == null ? 0 : liberties.Length; } }
-        bool AddStone(Stone stone)
+        public GroupOfStones(int val)
         {
+            stones = new List<Stone>();
+            liberties = new List<Stone>();
+            this.val = val;
+        }
+        public List<Stone> stones { get; private set; }
+        public List<Stone> liberties { get; private set; }
+        public int val { get; private set; }
+        public bool AddStone(Stone stone)
+        {
+            if (stone.val != val) return false;
             if (HasStone(stone)) return false;
-
-            List<Stone> temp = new List<Stone>(stones);
-            temp.Add(stone);
-            stones = temp.ToArray();
+            stones.Add(stone);
             stone.inGroup = true;
-
             return true;
         }
-        bool HasStone(Stone loc)
+        public bool HasStone(Stone loc)
         {
             foreach(Stone temp in stones)
+            {
+                if (temp.x == loc.x && temp.y == loc.y) return true;
+            }
+            return false;
+        }
+        public bool AddLiberty(Stone stone)
+        {
+            if (HasLiberty(stone)) return false;
+            liberties.Add(stone);
+            return true;
+        }
+        public bool HasLiberty(Stone loc)
+        {
+            foreach (Stone temp in liberties)
             {
                 if (temp.x == loc.x && temp.y == loc.y) return true;
             }
@@ -49,6 +70,7 @@ public class PlayController : MonoBehaviour {
     
     // Use this for initialization
     void Start () {
+        ClearBoard();
         BuildDisplay();
 	}
 	
@@ -88,7 +110,13 @@ public class PlayController : MonoBehaviour {
     /// </summary>
     void ClearBoard()
     {
-
+        for (byte x = 0; x < board.GetLength(0); x++)
+        {
+            for (byte y = 0; y < board.GetLength(1); y++)
+            {
+                board[x, y] = new Stone(x, y);
+            }
+        }
     }
     void BuildDisplay()
     {
@@ -139,7 +167,7 @@ public class PlayController : MonoBehaviour {
 
         Stone stone = GetPiece(x, y);
         stone.val = val;
-        if (false){//!DidPlayerCapture() && DidPlayerSuicide()) {
+        if (ShouldUndo()) {
             stone.val = 0;
             return false;
         }
@@ -162,24 +190,68 @@ public class PlayController : MonoBehaviour {
     {
 
     }
-    bool CheckForCaptures(byte val)
+    bool ShouldUndo()
     {
-
+        List<GroupOfStones> groups = FindAllGroups();
+        bool captures = CheckForCaptures(groups, (byte)(isPlayer1Turn ? 2 : 1));
+        bool suicides = CheckForCaptures(groups, (byte)(isPlayer1Turn ? 1 : 2));
+        return (!captures && suicides);
+    }
+    bool CheckForCaptures(List<GroupOfStones> groups, byte val)
+    {
+        foreach(GroupOfStones group in groups)
+        {
+            if (group.val != val) continue;
+            if (group.liberties.Count == 0) return true;
+        }
         return false;
     }
-    void FindAllGroups()
+    List<GroupOfStones> FindAllGroups()
     {
+        foreach (Stone stone in board) stone.inGroup = false;
 
+        List<GroupOfStones> groups = new List<GroupOfStones>();
+        foreach(Stone stone in board)
+        {
+            GroupOfStones group = MakeGroup(stone);
+            if (group != null && group.stones.Count > 0)
+            {
+                groups.Add(group);
+            }
+        }
+        return groups;
     }
-    List<Stone> GetMatchingNeighbors(int x, int y)
+    GroupOfStones MakeGroup(Stone stone)
     {
-        // TODO: need a closed list & an open list
-        // TODO: make this a recursive function... maybe?
-        Stone stone = GetPiece(x, y);
-        List<Stone> res = new List<Stone>();
+        if (stone == null) return null; // stone is null
+        if (stone.inGroup) return null; // stone is already in a group
+        if (stone.val == 0) return null; // open space (liberty)
 
-        // GetMatchingNeighbors()
-        return res;
+        GroupOfStones group = new GroupOfStones(stone.val);
+        AddToGroup(group, stone);
+
+        return group;
+    }
+    void AddToGroup(GroupOfStones group, Stone stone)
+    {
+        if (stone == null) return; // stone is null
+        if (stone.inGroup) return; // stone is already in a group
+        if (stone.val == 0)
+        {
+            group.AddLiberty(stone);
+            return; // open space (liberty)
+        }
+
+        int x = stone.x;
+        int y = stone.y;
+
+        if (group.AddStone(stone))
+        {
+            AddToGroup(group, GetPiece(x + 1, y));
+            AddToGroup(group, GetPiece(x - 1, y));
+            AddToGroup(group, GetPiece(x, y + 1));
+            AddToGroup(group, GetPiece(x, y - 1));
+        }
     }
     Stone GetPiece(int x, int y)
     {
