@@ -59,55 +59,18 @@ public class PlayController : MonoBehaviour {
     }
 
     Stone[,] board = new Stone[9, 9];
-    bool isPlayer1Turn = true;
-    PieceController ghost;
-
-    public Camera cam;
+    public bool isPlayer1Turn { get; private set; }
 
     GobanRenderer goban;
-    public PieceController prefabStone;
 
     // Use this for initialization
     void Start () {
+        isPlayer1Turn = true;
         ClearBoard();
         goban = GetComponent<GobanRenderer>();
         goban.Display(board);
-        ghost = Instantiate(prefabStone);
-        ghost.isGhost = true;
     }
 
-    // Update is called once per frame
-    void Update () {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        Plane plane = new Plane(Vector3.up, 0);
-        Debug.DrawRay(ray.origin, ray.direction, Color.yellow);
-        float dis = 0;
-        if(plane.Raycast(ray, out dis))
-        {
-            Vector3 pos = ray.GetPoint(dis);
-            int x = (int)Mathf.Round(pos.x);
-            int y = (int)Mathf.Round(pos.z);
-            if (IsVacantSpot(x, y))
-            {
-                ghost.gameObject.SetActive(true);
-                ghost.transform.position = new Vector3(x, 0, y);
-                if (Input.GetButtonDown("Fire1"))
-                {
-                    if (SetPiece(x, y, (byte)(isPlayer1Turn ? 1 : 2)))
-                    {
-                        isPlayer1Turn = !isPlayer1Turn;
-                        goban.Display(board);
-                        ghost.gameObject.SetActive(false);
-                        ghost.SetGameState((byte)(isPlayer1Turn ? 1 : 2));
-                    }
-                }
-            } else
-            {
-                ghost.gameObject.SetActive(false);
-            }
-            
-        }
-	}
     /// <summary>
     /// Sets every stone's value to 0.
     /// </summary>
@@ -122,7 +85,17 @@ public class PlayController : MonoBehaviour {
         }
     }
     
-    bool SetPiece(int x, int y, byte val)
+    public bool Play(int x, int y)
+    {
+        if (SetPiece(x, y, (byte)(isPlayer1Turn ? 1 : 2)))
+        {
+            isPlayer1Turn = !isPlayer1Turn;
+            goban.Display(board);
+            return true; // play
+        }
+        return false; // no play
+    }
+    public bool SetPiece(int x, int y, byte val)
     {
         if (!IsVacantSpot(x, y)) return false;
 
@@ -135,13 +108,13 @@ public class PlayController : MonoBehaviour {
 
         return true;
     }
-    bool IsValidSpot(int x, int y)
+    public bool IsValidSpot(int x, int y)
     {
         if (x < 0 || y < 0) return false;
         if (x >= board.GetLength(0) || y >= board.GetLength(1)) return false;
         return true;
     }
-    bool IsVacantSpot(int x, int y)
+    public bool IsVacantSpot(int x, int y)
     {
         if (!IsValidSpot(x, y)) return false;
         if (board[x, y].val != 0) return false;

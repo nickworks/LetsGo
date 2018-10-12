@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class GobanRenderer : MonoBehaviour {
 
-    PieceController[,] stones;
+    StoneController[,] stones;
     
-    public PieceController prefabStone;
+    public StoneController prefabStone;
     public Transform prefabLine;
 
     void SpawnStones(int sizex, int sizey)
     {
-        stones = new PieceController[sizex, sizey];
+        stones = new StoneController[sizex, sizey];
         for (int x = 0; x < sizex; x++)
         {
             for (int y = 0; y < sizey; y++)
@@ -55,4 +55,6 @@ public class GobanRenderer : MonoBehaviour {
         }
         //ghost.SetGameState((byte)(isPlayer1Turn ? 1 : 2));
     }
+
+    
 }

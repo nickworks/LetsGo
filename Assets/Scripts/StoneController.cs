@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PieceController : MonoBehaviour {
+[RequireComponent(typeof(MeshRenderer))]
+public class StoneController : MonoBehaviour {
 
     MeshRenderer view;
     public bool isGhost = false;
 
-	void Start () {
-        view = gameObject.GetComponent<MeshRenderer>();
-
+    public void SetPlayer(bool isPlayer1, bool isVisible = true)
+    {
+        int val = 0;
+        if (isVisible) val = isPlayer1 ? 1 : 2;
+        SetGameState(val);
     }
-	void Update () {
-		
-	}
-    public void SetGameState(byte val)
+    public void SetGameState(int val)
     {
         if(!view) view = gameObject.GetComponent<MeshRenderer>();
-        //if (isGhost) print(val + " player");
+
         switch (val)
         {
             case 0:
