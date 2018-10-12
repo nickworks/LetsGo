@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayController : MonoBehaviour {
 
-    class Stone {
+    public class Stone {
         public Stone(byte x, byte y)
         {
             this.x = x;
@@ -15,7 +15,7 @@ public class PlayController : MonoBehaviour {
         public byte val = 0;
         public bool inGroup = false;
     }
-    class GroupOfStones
+    public class GroupOfStones
     {
         public GroupOfStones(int val)
         {
@@ -59,23 +59,25 @@ public class PlayController : MonoBehaviour {
     }
 
     Stone[,] board = new Stone[9, 9];
-    PieceController[,] views;
+    bool isPlayer1Turn = true;
     PieceController ghost;
 
-    bool isPlayer1Turn = true;
-
-    public PieceController prefabView;
-    public Transform prefabLine;
     public Camera cam;
-    
+
+    GobanRenderer goban;
+    public PieceController prefabStone;
+
     // Use this for initialization
     void Start () {
         ClearBoard();
-        BuildDisplay();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        goban = GetComponent<GobanRenderer>();
+        goban.Display(board);
+        ghost = Instantiate(prefabStone);
+        ghost.isGhost = true;
+    }
+
+    // Update is called once per frame
+    void Update () {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         Plane plane = new Plane(Vector3.up, 0);
         Debug.DrawRay(ray.origin, ray.direction, Color.yellow);
@@ -94,8 +96,9 @@ public class PlayController : MonoBehaviour {
                     if (SetPiece(x, y, (byte)(isPlayer1Turn ? 1 : 2)))
                     {
                         isPlayer1Turn = !isPlayer1Turn;
+                        goban.Display(board);
                         ghost.gameObject.SetActive(false);
-                        RefreshDisplay();
+                        ghost.SetGameState((byte)(isPlayer1Turn ? 1 : 2));
                     }
                 }
             } else
@@ -118,49 +121,7 @@ public class PlayController : MonoBehaviour {
             }
         }
     }
-    void BuildDisplay()
-    {
-        int sizex = board.GetLength(0);
-        int sizey = board.GetLength(1);
-        views = new PieceController[sizex,sizey];
-        for (int x = 0; x < sizex; x++)
-        {
-            for (int y = 0; y < sizey; y++)
-            {
-                Vector3 pos = new Vector3(x, 0, y);
-                views[x, y] = Instantiate(prefabView, pos,Quaternion.identity);
-                views[x, y].transform.localScale = Vector3.one * 0.6f;
-            }
-        }
-        ghost = Instantiate(prefabView);
-        ghost.isGhost = true;
-
-
-        for (int x = 0; x < sizex; x++)
-        {
-            Instantiate(prefabLine, new Vector3(x, 0, 0), Quaternion.identity);
-        }
-        Quaternion rotateYaw = Quaternion.Euler(0, 90, 0);
-        for (int y = 0; y < sizey; y++)
-        {
-            Instantiate(prefabLine, new Vector3(0, 0, y), rotateYaw);
-        }
-
-        RefreshDisplay();
-    }
-    void RefreshDisplay(bool random = false)
-    {
-        for (int x = 0; x < views.GetLength(0); x++)
-        {
-            for (int y = 0; y < views.GetLength(1); y++)
-            {
-                byte val = board[x, y].val;
-                if (random) val = (byte) ((Random.value * 3) % 3);
-                views[x, y].SetGameState(val);
-            }
-        }
-        ghost.SetGameState((byte)(isPlayer1Turn ? 1 : 2));
-    }
+    
     bool SetPiece(int x, int y, byte val)
     {
         if (!IsVacantSpot(x, y)) return false;
