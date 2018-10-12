@@ -167,7 +167,7 @@ public class PlayController : MonoBehaviour {
 
         Stone stone = GetPiece(x, y);
         stone.val = val;
-        if (ShouldUndo()) {
+        if (CheckGroups()) {
             stone.val = 0;
             return false;
         }
@@ -186,17 +186,42 @@ public class PlayController : MonoBehaviour {
         if (board[x, y].val != 0) return false;
         return true;
     }
-    void CheckForAtari()
-    {
-
-    }
-    bool ShouldUndo()
+    bool CheckGroups()
     {
         List<GroupOfStones> groups = FindAllGroups();
         bool captures = CheckForCaptures(groups, (byte)(isPlayer1Turn ? 2 : 1));
         bool suicides = CheckForCaptures(groups, (byte)(isPlayer1Turn ? 1 : 2));
-        return (!captures && suicides);
+        if (!captures && suicides) return true; // committed suicide
+
+        // check for Ko, return true
+
+        // destroy all captured pieces
+        RemoveCapturedGroups(groups);
+
+        // rescan the board to get accurate liberty counts...
+
+        // show ataris
+
+        return false;
     }
+
+    private void RemoveCapturedGroups(List<GroupOfStones> groups)
+    {
+        foreach (GroupOfStones group in groups)
+        {
+            if (group.liberties.Count > 0) continue;
+            foreach (Stone stone in group.stones)
+            {
+                stone.val = 0;
+            }
+        }
+    }
+    /// <summary>
+    /// Checks a list of groups to see if any groups of a particular player are captured.
+    /// </summary>
+    /// <param name="groups">The list of groups to check (should be all the groups on the board).</param>
+    /// <param name="val">Which player value to check. 1/2 for black/white.</param>
+    /// <returns></returns>
     bool CheckForCaptures(List<GroupOfStones> groups, byte val)
     {
         foreach(GroupOfStones group in groups)
