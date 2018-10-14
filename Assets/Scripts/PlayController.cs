@@ -61,7 +61,7 @@ public class PlayController : MonoBehaviour {
         }
     }
 
-    Stone[,,] board = new Stone[4, 4, 2];
+    Stone[,,] board = new Stone[9, 9, 2];
 
     public bool isPlayer1Turn { get; private set; }
     public int stonesPerPlay = 1;

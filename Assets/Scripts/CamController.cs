@@ -9,20 +9,32 @@ public class CamController : MonoBehaviour {
 
     public float sensitivityX = 1;
     public float sensitivityY = 1;
+    public float sensitivityScroll = 1;
 
     public bool invertLookX = false;
     public bool invertLookY = true;
+    public bool invertScroll = false;
     public float moveEasing = 1;
+    public float dollyEasing = 5;
+    public float maxCamDistance = 10;
+    public float minCamDistance = 5;
 
     //public Vector3 target;
     public PlayController play;
+    float dollyTarget = 5;
+    Transform cam;
+    
 
     void Start()
     {
+        cam = GetComponentInChildren<Camera>().transform;
     }
 
 	// Update is called once per frame
 	void Update () {
+
+        if(!Input.GetButton("Jump")) dollyTarget += Input.mouseScrollDelta.y * sensitivityScroll * (invertScroll ? -1 : 1);
+        dollyTarget = Mathf.Clamp(dollyTarget, -maxCamDistance, -minCamDistance);
 
         if (Input.GetButton("Fire2"))
         {
@@ -33,5 +45,6 @@ public class CamController : MonoBehaviour {
         }
         transform.localEulerAngles = new Vector3(pitch, yaw, 0);
         transform.position = Vector3.Lerp(transform.position, play.GetCenter(), Time.deltaTime * moveEasing);
+        cam.localPosition = Vector3.Lerp(cam.localPosition, new Vector3(0, 0, dollyTarget), Time.deltaTime * dollyEasing);
     }
 }

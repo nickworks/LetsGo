@@ -27,9 +27,8 @@ public class MouseInput : MonoBehaviour {
     void Update()
     {
 
-        z += (int)(Input.mouseScrollDelta.y);
+        if(Input.GetButton("Jump")) z += (int)(Input.mouseScrollDelta.y);
         z = Mathf.Clamp(z, 0, play.SizeZ() - 1);
-        
 
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         Plane plane = new Plane(Vector3.up, -z);
@@ -37,7 +36,6 @@ public class MouseInput : MonoBehaviour {
         Debug.DrawRay(ray.origin, ray.direction, Color.yellow);
         float dis = 0;
 
-        bool showGhost = false;
         if (plane.Raycast(ray, out dis))
         {
             Vector3 pos = ray.GetPoint(dis);
@@ -50,14 +48,11 @@ public class MouseInput : MonoBehaviour {
 
             if (play.IsVacantSpot(x, y, z))
             {
-                showGhost = true;
-                ghost.transform.position = new Vector3(x, z, y);
                 if (Input.GetButtonDown("Fire1"))
                 {
-                    if (play.PlayStoneAt(x, y, z)) showGhost = false;
+                    play.PlayStoneAt(x, y, z);
                 }
             }
         }
-        //ghost.SetPlayer(play.isPlayer1Turn, showGhost);
     }
 }
