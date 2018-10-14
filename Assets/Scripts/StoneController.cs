@@ -6,13 +6,14 @@ public class StoneController : MonoBehaviour {
 
     MeshRenderer view;
     bool isGhost = false;
-    public bool isHighlighting = false;
-    public bool isSetValue = false;
-    public bool isHovering = false;
+    public bool preventPreviewing = false;
+    public bool showAsSelectable = false;
+    public bool showPreview = false;
 
     public Transform lines;
 
     int value = 0;
+    int previewValue = 0;
 
     public void SetPlayer(bool isPlayer1, bool isVisible = true)
     {
@@ -23,11 +24,11 @@ public class StoneController : MonoBehaviour {
     public void SetGameState(int val)
     {
         value = val;
-        if(value > 0) isSetValue = true;
+        preventPreviewing = (value > 0);
     }
     public void PreviewGameState(int val)
     {
-        if(!isSetValue) value = val;
+        previewValue = val;
     }
     public void SetIsGhost(bool isGhost)
     {
@@ -42,15 +43,24 @@ public class StoneController : MonoBehaviour {
             //view.enabled = value > 0;
             view.enabled = true;
 
-            if (value == 1) view.material.color = Color.black;
-            if (value == 2) view.material.color = Color.white;
+            
 
             float size = 0;
-            
-            if (isHighlighting) size = .05f;
-            if (isHovering) size = .25f;
-            if (isSetValue && value > 0) size = 1;
+            if (preventPreviewing)
+            {
+                if (value == 1) view.material.color = Color.black;
+                if (value == 2) view.material.color = Color.white;
 
+                if (value > 0) size = 1;
+            }
+            else
+            {
+                if (previewValue == 1) view.material.color = Color.black;
+                if (previewValue == 2) view.material.color = Color.white;
+
+                if (showAsSelectable) size = .05f;
+                if (showPreview) size = .25f;
+            }
             lines.transform.localScale = Vector3.zero;// (value == 0 || isGhost) ? Vector3.zero : Vector3.one * .1f;
 
             view.transform.localScale = Vector3.Lerp(view.transform.localScale, Vector3.one * size, Time.deltaTime * 10);
@@ -59,7 +69,7 @@ public class StoneController : MonoBehaviour {
     }
     public void Highlight(bool highlight, bool hover)
     {
-        isHighlighting = highlight;
-        isHovering = hover;
+        showAsSelectable = highlight;
+        showPreview = hover;
     }
 }
