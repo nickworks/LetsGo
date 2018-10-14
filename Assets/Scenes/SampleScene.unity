@@ -211,8 +211,8 @@ Camera:
   m_GameObject: {fileID: 534669902}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.3255162, g: 0.5188679, b: 0.40780237, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -249,11 +249,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -20.1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1307936118}
+  m_Father: {fileID: 829051945}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &829051944
@@ -266,7 +266,7 @@ GameObject:
   - component: {fileID: 829051945}
   - component: {fileID: 829051946}
   m_Layer: 0
-  m_Name: RigYaw
+  m_Name: CameraRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -279,10 +279,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 829051944}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 0, z: 4}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1307936118}
+  - {fileID: 534669905}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -297,6 +297,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebbf9565f4ee8f84ba5f8d1e7b1e6724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sensitivityX: 5
+  sensitivityY: 2
+  invertLookX: 0
+  invertLookY: 1
+  moveEasing: 1
+  play: {fileID: 2122903941}
 --- !u!1 &1010036528
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,35 +365,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1307936117
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1307936118}
-  m_Layer: 0
-  m_Name: RigPitch
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1307936118
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1307936117}
-  m_LocalRotation: {x: 0.51164305, y: -0, z: -0, w: 0.8591981}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 534669905}
-  m_Father: {fileID: 829051945}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 61.547005, y: 0, z: 0}
 --- !u!1 &2122903940
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,6 +433,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 534669904}
-  play: {fileID: 0}
   prefabStone: {fileID: 114428823080319818, guid: d5d5f14a99095104ba8ad6b366e85c6a,
     type: 2}
+  dummy: {fileID: 0}

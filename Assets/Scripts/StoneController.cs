@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MeshRenderer))]
 public class StoneController : MonoBehaviour {
 
     MeshRenderer view;
-    public bool isGhost = false;
+    bool isGhost = false;
+    public bool isHighlighting = false;
+    public bool isSetValue = false;
+    public bool isHovering = false;
+
+    public Transform lines;
+
+    int value = 0;
 
     public void SetPlayer(bool isPlayer1, bool isVisible = true)
     {
@@ -16,21 +22,44 @@ public class StoneController : MonoBehaviour {
     }
     public void SetGameState(int val)
     {
-        if(!view) view = gameObject.GetComponent<MeshRenderer>();
-
-        switch (val)
+        value = val;
+        if(value > 0) isSetValue = true;
+    }
+    public void PreviewGameState(int val)
+    {
+        if(!isSetValue) value = val;
+    }
+    public void SetIsGhost(bool isGhost)
+    {
+        this.isGhost = isGhost;
+        lines.gameObject.SetActive(!isGhost);
+    }
+    void Update()
+    {
+        if (!view) view = GetComponentInChildren<MeshRenderer>();
+        if (view)
         {
-            case 0:
-                gameObject.SetActive(false);
-                break;
-            case 1:
-                gameObject.SetActive(true);
-                view.material.color = Color.black;
-                break;
-            case 2:
-                gameObject.SetActive(true);
-                view.material.color = Color.white;
-                break;
+            //view.enabled = value > 0;
+            view.enabled = true;
+
+            if (value == 1) view.material.color = Color.black;
+            if (value == 2) view.material.color = Color.white;
+
+            float size = 0;
+            
+            if (isHighlighting) size = .05f;
+            if (isHovering) size = .25f;
+            if (isSetValue && value > 0) size = 1;
+
+            lines.transform.localScale = Vector3.zero;// (value == 0 || isGhost) ? Vector3.zero : Vector3.one * .1f;
+
+            view.transform.localScale = Vector3.Lerp(view.transform.localScale, Vector3.one * size, Time.deltaTime * 10);
+                
         }
+    }
+    public void Highlight(bool highlight, bool hover)
+    {
+        isHighlighting = highlight;
+        isHovering = hover;
     }
 }
