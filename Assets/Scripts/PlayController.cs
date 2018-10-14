@@ -61,10 +61,11 @@ public class PlayController : MonoBehaviour {
         }
     }
 
-    Stone[,,] board = new Stone[4, 4, 4];
+    Stone[,,] board = new Stone[4, 4, 2];
 
     public bool isPlayer1Turn { get; private set; }
-
+    public int stonesPerPlay = 1;
+    public int stonesRemaining = 0;
     GobanRenderer goban;
 
     // Use this for initialization
@@ -75,7 +76,7 @@ public class PlayController : MonoBehaviour {
         goban.Display(board);
     }
     public Vector3 GetCenter() {
-        return new Vector3(board.GetLength(0)-1, board.GetLength(1)-1, board.GetLength(2)-1) / 2;
+        return new Vector3(board.GetLength(0)-1, board.GetLength(2)-1, board.GetLength(1)-1) / 2;
     }
     public int SizeZ()
     {
@@ -114,7 +115,9 @@ public class PlayController : MonoBehaviour {
 
         if (CaptureStones()) // attempt to capture stones
         {
-            NextTurn();
+            stonesRemaining--;
+            if(stonesRemaining <= 0) NextTurn();
+            //print(stonesRemaining);
             goban.Display(board); // doesn't belong here?
             return true; // successful play
         }
@@ -127,6 +130,8 @@ public class PlayController : MonoBehaviour {
     public void NextTurn()
     {
         isPlayer1Turn = !isPlayer1Turn;
+        stonesRemaining = stonesPerPlay;
+        print(stonesPerPlay);
     }
     /// <summary>
     /// Changes a designated stone's value (in other words, "play a stone"). No rule-checking is done.

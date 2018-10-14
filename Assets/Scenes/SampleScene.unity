@@ -394,6 +394,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e427216d212b2ef40a67c478cf57e624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stonesPerPlay: 1
+  stonesRemaining: 0
 --- !u!4 &2122903942
 Transform:
   m_ObjectHideFlags: 0

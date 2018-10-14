@@ -43,8 +43,6 @@ public class StoneController : MonoBehaviour {
             //view.enabled = value > 0;
             view.enabled = true;
 
-            
-
             float size = 0;
             if (preventPreviewing)
             {

@@ -32,21 +32,22 @@ public class GobanRenderer : MonoBehaviour {
         int z = sizez - 1;
 
         Instantiate(prefabLine, new Vector3(0, 0, 0), Quaternion.identity).localScale = Vector3.one * y;
-        Instantiate(prefabLine, new Vector3(z, 0, 0), Quaternion.identity).localScale = Vector3.one * y;
-        Instantiate(prefabLine, new Vector3(0, y, 0), Quaternion.identity).localScale = Vector3.one * y;
-        Instantiate(prefabLine, new Vector3(z, y, 0), Quaternion.identity).localScale = Vector3.one * y;
-
+        Instantiate(prefabLine, new Vector3(x, 0, 0), Quaternion.identity).localScale = Vector3.one * y;
+        Instantiate(prefabLine, new Vector3(x, z, 0), Quaternion.identity).localScale = Vector3.one * y;
+        Instantiate(prefabLine, new Vector3(0, z, 0), Quaternion.identity).localScale = Vector3.one * y;
+        
         Quaternion rotateYaw = Quaternion.Euler(0, 90, 0);
         Instantiate(prefabLine, new Vector3(0, 0, 0), rotateYaw).localScale = Vector3.one * x;
-        Instantiate(prefabLine, new Vector3(0, 0, x), rotateYaw).localScale = Vector3.one * x;
-        Instantiate(prefabLine, new Vector3(0, y, 0), rotateYaw).localScale = Vector3.one * x;
-        Instantiate(prefabLine, new Vector3(0, y, x), rotateYaw).localScale = Vector3.one * x;
-
+        Instantiate(prefabLine, new Vector3(0, 0, y), rotateYaw).localScale = Vector3.one * x;
+        Instantiate(prefabLine, new Vector3(0, z, y), rotateYaw).localScale = Vector3.one * x;
+        Instantiate(prefabLine, new Vector3(0, z, 0), rotateYaw).localScale = Vector3.one * x;
+        
         Quaternion rotatePitch = Quaternion.Euler(90, 0, 0);
-        Instantiate(prefabLine, new Vector3(0, y, 0), rotatePitch).localScale = Vector3.one * z;
-        Instantiate(prefabLine, new Vector3(0, y, x), rotatePitch).localScale = Vector3.one * z;
-        Instantiate(prefabLine, new Vector3(z, y, 0), rotatePitch).localScale = Vector3.one * z;
-        Instantiate(prefabLine, new Vector3(z, y, x), rotatePitch).localScale = Vector3.one * z;
+        Instantiate(prefabLine, new Vector3(x, z, 0), rotatePitch).localScale = Vector3.one * z;
+        Instantiate(prefabLine, new Vector3(x, z, y), rotatePitch).localScale = Vector3.one * z;
+        Instantiate(prefabLine, new Vector3(0, z, y), rotatePitch).localScale = Vector3.one * z;
+        Instantiate(prefabLine, new Vector3(0, z, 0), rotatePitch).localScale = Vector3.one * z;
+        
     }
     public void Display(PlayController.Stone[,,] board, bool random = false)
     {
