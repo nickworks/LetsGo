@@ -240,6 +240,8 @@ public class PlayController : MonoBehaviour {
         if (!IsValidSpot(x, y)) return null;
         return board[x, y];
     }
+
+    
     public byte[,] GetData()
     {
         byte[,] data = new byte[board.GetLength(0), board.GetLength(1)];
@@ -263,18 +265,6 @@ public class PlayController : MonoBehaviour {
                 board[x, y].val = data[x, y];
             }
         }
-    }
-    void PushHistory()
-    {
-        // TODO: store current game state.
-    }
-    void PopHistory()
-    {
-        // TODO: roll-back game state.
-    }
-    void Undo()
-    {
-        PopHistory();
     }
 
 }
