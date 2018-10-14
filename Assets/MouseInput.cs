@@ -36,7 +36,7 @@ public class MouseInput : MonoBehaviour {
                 ghost.transform.position = new Vector3(x, 0, y);
                 if (Input.GetButtonDown("Fire1"))
                 {
-                    if (play.Play(x, y)) showGhost = false;
+                    if (play.PlayStoneAt(x, y)) showGhost = false;
                 }
             }
         }
