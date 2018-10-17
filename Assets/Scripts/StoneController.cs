@@ -4,16 +4,12 @@ using UnityEngine;
 
 public class StoneController : MonoBehaviour {
 
-    MeshRenderer view;
-    bool isGhost = false;
-    public bool preventPreviewing = false;
-    public bool showAsSelectable = false;
-    public bool showPreview = false;
+    public Transform preview;
+    public Transform stone;
 
-    public Transform lines;
-
-    int value = 0;
-    int previewValue = 0;
+    public int value { get; private set; }
+    public bool showLargePreview { get; set; }
+    public bool showPreview { get; set; }
 
     public void SetPlayer(bool isPlayer1, bool isVisible = true)
     {
@@ -24,50 +20,33 @@ public class StoneController : MonoBehaviour {
     public void SetGameState(int val)
     {
         value = val;
-        preventPreviewing = (value > 0);
+        UpdateViews();
+        MeshRenderer mesh = stone.GetComponentInChildren<MeshRenderer>();
+        mesh.material.color = val == 1 ? Color.black : Color.white;
+
     }
-    public void PreviewGameState(int val)
+    public void PreviewGameState(int whoseTurn)
     {
-        previewValue = val;
+        if (value > 0) return; // don't bother
+        UpdateViews();
+        MeshRenderer mesh = preview.GetComponentInChildren<MeshRenderer>();
+        if (whoseTurn == 1) mesh.material.color = Color.black;
+        if (whoseTurn == 2) mesh.material.color = Color.white;
     }
-    public void SetIsGhost(bool isGhost)
+    void UpdateViews()
     {
-        this.isGhost = isGhost;
-        lines.gameObject.SetActive(!isGhost);
+        stone.gameObject.SetActive(value>0);
+        preview.gameObject.SetActive(value==0);
     }
+
+    float previewSize = 0;
     void Update()
     {
-        if (!view) view = GetComponentInChildren<MeshRenderer>();
-        if (view)
+        if (preview.gameObject.activeSelf)
         {
-            //view.enabled = value > 0;
-            view.enabled = true;
-
-            float size = 0;
-            if (preventPreviewing)
-            {
-                if (value == 1) view.material.color = Color.black;
-                if (value == 2) view.material.color = Color.white;
-
-                if (value > 0) size = 1;
-            }
-            else
-            {
-                if (previewValue == 1) view.material.color = Color.black;
-                if (previewValue == 2) view.material.color = Color.white;
-
-                if (showAsSelectable) size = .05f;
-                if (showPreview) size = .25f;
-            }
-            lines.transform.localScale = Vector3.zero;// (value == 0 || isGhost) ? Vector3.zero : Vector3.one * .1f;
-
-            view.transform.localScale = Vector3.Lerp(view.transform.localScale, Vector3.one * size, Time.deltaTime * 10);
-                
+            float scale = (showLargePreview) ? .08f : .005f;
+            previewSize = Mathf.Lerp(previewSize, scale, Time.deltaTime * 5);
+            preview.localScale = Vector3.one * previewSize;
         }
-    }
-    public void Highlight(bool highlight, bool hover)
-    {
-        showAsSelectable = highlight;
-        showPreview = hover;
     }
 }

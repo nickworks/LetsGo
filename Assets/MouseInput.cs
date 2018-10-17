@@ -8,7 +8,7 @@ public class MouseInput : MonoBehaviour {
     
     public StoneController prefabStone;
 
-    StoneController ghost;
+    //StoneController ghost;
     PlayController play;
     GobanRenderer goban;
 
@@ -19,8 +19,8 @@ public class MouseInput : MonoBehaviour {
     void Start () {
         play = GetComponent<PlayController>();
         goban = GetComponent<GobanRenderer>();
-        ghost = Instantiate(prefabStone);
-        ghost.SetIsGhost(true);
+        //ghost = Instantiate(prefabStone);
+        //ghost.SetIsGhost(true);
     }
 
     // Update is called once per frame
@@ -44,7 +44,7 @@ public class MouseInput : MonoBehaviour {
 
             if(dummy)dummy.position = pos;
 
-            goban.HighlightLayer(x, y, z, (byte)(play.isPlayer1Turn ? 1 : 2));
+            goban.Highlight(x, y, z, play.currentPlayerTurn);
 
             if (play.IsVacantSpot(x, y, z))
             {
