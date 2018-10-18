@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class PlayController : MonoBehaviour {
 
-    static public int sizex = 1;
-    static public int sizey = 1;
+    static public int sizex = 9;
+    static public int sizey = 9;
     static public int sizez = 1;
 
     public class Stone {

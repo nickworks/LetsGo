@@ -10,16 +10,18 @@ public class CamController : MonoBehaviour {
     public float sensitivityX = 1;
     public float sensitivityY = 1;
     public float sensitivityScroll = 1;
+    public float sensitivityTriggers = .25f;
 
     public bool invertLookX = false;
     public bool invertLookY = true;
     public bool invertScroll = false;
+    public bool invertTriggers = false;
     public float moveEasing = 1;
     public float dollyEasing = 5;
     public float maxCamDistance = 20;
     public float minCamDistance = 2;
 
-    //public Vector3 target;
+    public Transform pitchControl;
     public PlayController play;
     float dollyTarget = -15;
     Transform cam;
@@ -42,8 +44,6 @@ public class CamController : MonoBehaviour {
         Dolly();
         Orbit();
 
-        
-
         Ease();
     }
 
@@ -60,13 +60,20 @@ public class CamController : MonoBehaviour {
             velocity += transform.forward * v * Time.deltaTime * accelerationMultiplier;
             velocity += transform.right * h * Time.deltaTime * accelerationMultiplier;
         }
+        if (velocity.sqrMagnitude > maxSpeed * maxSpeed) velocity = velocity.normalized * maxSpeed;
         offset += velocity * Time.deltaTime;
-        offset.y = 0;
-        Vector3 pos = Vector3.zero + offset;
-        if (play)
+
+        Vector3 center = play ? play.GetCenter() : Vector3.zero;
+        Vector3 pos = center + offset;
+
+        if (play && !play.GetBounds().Contains(pos))
         {
-            pos = play.GetCenter() + offset;
-            pos = play.GetBounds().ClosestPoint(pos);
+            Vector3 newpos = play.GetBounds().ClosestPoint(pos);
+            if (newpos.x != pos.x) velocity.x = 0;
+            if (newpos.y != pos.y) velocity.y = 0;
+            if (newpos.z != pos.z) velocity.z = 0;
+            pos = newpos;
+            offset = pos - center;
         }
         transform.position = Vector3.Lerp(transform.position, pos, Time.deltaTime * moveEasing);
         
@@ -74,20 +81,29 @@ public class CamController : MonoBehaviour {
 
     private void Orbit()
     {
+        float mx = Input.GetAxis("Horizontal2");
+        float my = Input.GetAxis("Vertical2");
+
         if (Input.GetButton("Fire2"))
         {
-            float mx = Input.GetAxis("Mouse X");
-            float my = Input.GetAxis("Mouse Y");
-            yaw += mx * sensitivityX * (invertLookX ? -1 : 1);
-            pitch += my * sensitivityY * (invertLookY ? -1 : 1);
+            mx = Input.GetAxis("Mouse X");
+            my = Input.GetAxis("Mouse Y");
         }
-        transform.localEulerAngles = new Vector3(pitch, yaw, 0);
+        
+        yaw += mx * sensitivityX * (invertLookX ? -1 : 1);
+        pitch += my * sensitivityY * (invertLookY ? -1 : 1);
+        
+        transform.localEulerAngles = new Vector3(0, yaw, 0);
+        pitchControl.localEulerAngles = new Vector3(pitch, 0, 0);
         cam.localPosition = Vector3.Lerp(cam.localPosition, new Vector3(0, 0, dollyTarget), Time.deltaTime * dollyEasing);
     }
 
     private void Dolly()
     {
         if (!Input.GetButton("Jump")) dollyTarget += Input.mouseScrollDelta.y * sensitivityScroll * (invertScroll ? -1 : 1);
+
+
+        dollyTarget += Input.GetAxis("Triggers") * sensitivityTriggers * (invertTriggers ? -1 : 1);
         dollyTarget = Mathf.Clamp(dollyTarget, -maxCamDistance, -minCamDistance);
     }
 }
