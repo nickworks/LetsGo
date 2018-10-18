@@ -5,27 +5,18 @@ using UnityEngine;
 public class MouseInput : MonoBehaviour {
 
     public Camera cam;
-    
     public StoneController prefabStone;
-
-    //StoneController ghost;
-    PlayController play;
-    GobanRenderer goban;
-
-    int z = 0;
-
     public Transform dummy;
+    PlayController play;
+    int z = 0;    
 
     void Start () {
         play = GetComponent<PlayController>();
-        goban = GetComponent<GobanRenderer>();
-        //ghost = Instantiate(prefabStone);
-        //ghost.SetIsGhost(true);
     }
-
-    // Update is called once per frame
     void Update()
     {
+        GobanRenderer goban = play.getCurrentGoban();
+        if (!goban) return;
 
         if(Input.GetButton("Jump")) z += (int)(Input.mouseScrollDelta.y);
         z = Mathf.Clamp(z, 0, play.SizeZ() - 1);

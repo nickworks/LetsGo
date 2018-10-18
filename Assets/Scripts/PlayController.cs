@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -61,9 +62,18 @@ public class PlayController : MonoBehaviour {
         }
     }
 
-    Stone[,,] board = new Stone[9, 9, 2];
+    public GobanRenderer getCurrentGoban()
+    {
+        return goban;
+    }
+
+    Stone[,,] data;
 
     public byte currentPlayerTurn { get; private set; }
+    public DummyController dummyObject;
+
+    public GobanRenderer gobanPrefab;
+
     public byte numberOfPlayers = 2;
 
     //public bool isPlayer1Turn { get; private set; }
@@ -74,33 +84,49 @@ public class PlayController : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        ClearBoard(); // make data
-
-        goban = GetComponent<GobanRenderer>();
-        goban.Display(board); // make visuals
-
         
+    }
+    public void BeginGame(int x, int y, int z)
+    {
+        MakeData(x,y,z); // make data
+
+        if (goban) Destroy(goban);
+        goban = Instantiate(gobanPrefab);
+        goban.Display(data); // make visuals
+
         NextTurn(); // begin play
     }
+
+    public Bounds GetBounds()
+    {
+        if (data == null) return new Bounds();
+        int x = data.GetLength(0) - 1;
+        int y = data.GetLength(2) - 1;
+        int z = data.GetLength(1) - 1;
+        Vector3 size = new Vector3(x, y, z);
+        return new Bounds(size / 2, size);
+    }
     public Vector3 GetCenter() {
-        return new Vector3(board.GetLength(0)-1, board.GetLength(2)-1, board.GetLength(1)-1) / 2;
+        if (data == null) return Vector3.zero;
+        return new Vector3(data.GetLength(0)-1, data.GetLength(2)-1, data.GetLength(1)-1) / 2;
     }
     public int SizeZ()
     {
-        return board.GetLength(2);
+        return data.GetLength(2);
     }
     /// <summary>
     /// Fills the board with stones, and sets every stone's value to 0.
     /// </summary>
-    void ClearBoard()
+    void MakeData(int X, int Y, int Z)
     {
-        for (byte x = 0; x < board.GetLength(0); x++)
+        data = new Stone[X, Y, Z];
+        for (byte x = 0; x < data.GetLength(0); x++)
         {
-            for (byte y = 0; y < board.GetLength(1); y++)
+            for (byte y = 0; y < data.GetLength(1); y++)
             {
-                for (byte z = 0; z < board.GetLength(2); z++)
+                for (byte z = 0; z < data.GetLength(2); z++)
                 {
-                    board[x, y, z] = new Stone(x, y, z);
+                    data[x, y, z] = new Stone(x, y, z);
                 }
             }
         }
@@ -124,7 +150,7 @@ public class PlayController : MonoBehaviour {
             stonesRemaining--;
             if(stonesRemaining <= 0) NextTurn();
             //print(stonesRemaining);
-            goban.Display(board); // doesn't belong here?
+            goban.Display(data); // doesn't belong here?
             return true; // successful play
         }
         SetStoneValue(x, y, z, 0); // undo mode
@@ -139,6 +165,7 @@ public class PlayController : MonoBehaviour {
         if (currentPlayerTurn > numberOfPlayers) currentPlayerTurn = 1;
         stonesRemaining = stonesPerPlay;
         goban.ChangePlayerTurn(currentPlayerTurn);
+        dummyObject.ChangePlayerTurn(currentPlayerTurn);
         //print(stonesPerPlay);
     }
     /// <summary>
@@ -154,13 +181,13 @@ public class PlayController : MonoBehaviour {
     public bool IsValidSpot(int x, int y, int z = 0)
     {
         if (x < 0 || y < 0 || z < 0) return false;
-        if (x >= board.GetLength(0) || y >= board.GetLength(1) || z >= board.GetLength(2)) return false;
+        if (x >= data.GetLength(0) || y >= data.GetLength(1) || z >= data.GetLength(2)) return false;
         return true;
     }
     public bool IsVacantSpot(int x, int y, int z)
     {
         if (!IsValidSpot(x, y)) return false;
-        if (board[x, y, z].val != 0) return false;
+        if (data[x, y, z].val != 0) return false;
         return true;
     }
     /// <summary>
@@ -174,7 +201,7 @@ public class PlayController : MonoBehaviour {
         bool areThereAnySuicides = CheckForSuicides(groups);
         if (!areThereAnyCaptures && areThereAnySuicides) return false; // ILLEGAL MOVE: committed suicide
 
-        // check for Ko, return true
+        // TODO: check for Ko, return false; // ILLEGAL MOVE: ko
 
         // destroy all captured pieces
         RemoveCapturedGroups(groups);
@@ -185,12 +212,16 @@ public class PlayController : MonoBehaviour {
 
         return true;
     }
-
+    /// <summary>
+    /// This function removes all groups with 0 liberties, except for groups owned by the current player.
+    /// </summary>
+    /// <param name="groups">The list of current groups</param>
     void RemoveCapturedGroups(List<GroupOfStones> groups)
     {
         foreach (GroupOfStones group in groups)
         {
-            if (group.liberties.Count > 0) continue;
+            if (group.liberties.Count > 0) continue; // ignore groups that have liberties
+            if (group.val == currentPlayerTurn) continue; // ignore current player's stones
             foreach (Stone stone in group.stones)
             {
                 stone.val = 0;
@@ -223,10 +254,10 @@ public class PlayController : MonoBehaviour {
     }
     List<GroupOfStones> FindAllGroups()
     {
-        foreach (Stone stone in board) stone.inGroup = false;
+        foreach (Stone stone in data) stone.inGroup = false;
 
         List<GroupOfStones> groups = new List<GroupOfStones>();
-        foreach(Stone stone in board)
+        foreach(Stone stone in data)
         {
             GroupOfStones group = MakeGroup(stone);
             if (group != null && group.stones.Count > 0)
@@ -274,15 +305,15 @@ public class PlayController : MonoBehaviour {
     Stone GetStoneAt(int x, int y, int z)
     {
         if (!IsValidSpot(x, y, z)) return null;
-        return board[x, y, z];
+        return data[x, y, z];
     }
 
     
     public byte[,,] GetData()
     {
-        int sx = board.GetLength(0);
-        int sy = board.GetLength(1);
-        int sz = board.GetLength(2);
+        int sx = this.data.GetLength(0);
+        int sy = this.data.GetLength(1);
+        int sz = this.data.GetLength(2);
 
         byte[,,] data = new byte[sx, sy, sz];
         for (byte x = 0; x < sx; x++)
@@ -299,19 +330,19 @@ public class PlayController : MonoBehaviour {
     }
     public void SetData(byte[,,] data)
     {
-        int sx = board.GetLength(0);
-        int sy = board.GetLength(1);
-        int sz = board.GetLength(2);
+        int sx = this.data.GetLength(0);
+        int sy = this.data.GetLength(1);
+        int sz = this.data.GetLength(2);
 
-        board = new Stone[sx, sy, sz];
+        this.data = new Stone[sx, sy, sz];
         for (byte x = 0; x < sx; x++)
         {
             for (byte y = 0; y < sy; y++)
             {
                 for (byte z = 0; z < sz; z++)
                 {
-                    board[x, y, z] = new Stone(x, y, z);
-                    board[x, y, z].val = data[x, y, z];
+                    this.data[x, y, z] = new Stone(x, y, z);
+                    this.data[x, y, z].val = data[x, y, z];
                 }
             }
         }

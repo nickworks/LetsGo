@@ -89,7 +89,7 @@ public class GobanRenderer : MonoBehaviour {
     /// <param name="board">The state of the board, a multi-dimensional array of Stone objects.</param>
     public void Display(PlayController.Stone[,,] board)
     {
-        print("Model updating state now...");
+        //print("Model updating state now...");
         int sizex = board.GetLength(0);
         int sizey = board.GetLength(1);
         int sizez = board.GetLength(2);
@@ -167,6 +167,5 @@ public class GobanRenderer : MonoBehaviour {
             }
         }
     }
-
     
 }
