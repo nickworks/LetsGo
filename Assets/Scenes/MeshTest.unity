@@ -265,6 +265,7 @@ MonoBehaviour:
   prefabStone: {fileID: 114428823080319818, guid: d5d5f14a99095104ba8ad6b366e85c6a,
     type: 2}
   dummy: {fileID: 2053602888}
+  meshMode: 1
 --- !u!20 &1210526672 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 20970997710699444, guid: 2f7efc054fcd694469882ba1fa6966ed,

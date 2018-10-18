@@ -145,6 +145,7 @@ MonoBehaviour:
   prefabStone: {fileID: 114428823080319818, guid: d5d5f14a99095104ba8ad6b366e85c6a,
     type: 2}
   dummy: {fileID: 374938926}
+  meshMode: 0
 --- !u!114 &200326593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,48 +343,6 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f7efc054fcd694469882ba1fa6966ed, type: 2}
   m_IsPrefabAsset: 0
---- !u!1001 &1543912737
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4306590520805702, guid: d5d5f14a99095104ba8ad6b366e85c6a, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4306590520805702, guid: d5d5f14a99095104ba8ad6b366e85c6a, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4306590520805702, guid: d5d5f14a99095104ba8ad6b366e85c6a, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4306590520805702, guid: d5d5f14a99095104ba8ad6b366e85c6a, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4306590520805702, guid: d5d5f14a99095104ba8ad6b366e85c6a, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4306590520805702, guid: d5d5f14a99095104ba8ad6b366e85c6a, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4306590520805702, guid: d5d5f14a99095104ba8ad6b366e85c6a, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4306590520805702, guid: d5d5f14a99095104ba8ad6b366e85c6a, type: 2}
-      propertyPath: m_RootOrder
-      value: 6
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d5d5f14a99095104ba8ad6b366e85c6a, type: 2}
-  m_IsPrefabAsset: 0
 --- !u!1 &1785643500
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,6 +416,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114074060173157010, guid: dcaa03b88382b034d9c70eef6b605552,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 224481983494483026, guid: dcaa03b88382b034d9c70eef6b605552,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -592,6 +556,37 @@ Prefab:
       propertyPath: m_AnchoredPosition.y
       value: 266
       objectReference: {fileID: 0}
+    - target: {fileID: 114074060173157010, guid: dcaa03b88382b034d9c70eef6b605552,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114074060173157010, guid: dcaa03b88382b034d9c70eef6b605552,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114074060173157010, guid: dcaa03b88382b034d9c70eef6b605552,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1802548072}
+    - target: {fileID: 114074060173157010, guid: dcaa03b88382b034d9c70eef6b605552,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadMeshExample
+      objectReference: {fileID: 0}
+    - target: {fileID: 114074060173157010, guid: dcaa03b88382b034d9c70eef6b605552,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcaa03b88382b034d9c70eef6b605552, type: 2}
   m_IsPrefabAsset: 0
+--- !u!114 &1802548072 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114822163655860620, guid: dcaa03b88382b034d9c70eef6b605552,
+    type: 2}
+  m_PrefabInternal: {fileID: 1802548071}
+  m_Script: {fileID: 11500000, guid: f3bece97f780e0c439ee7a49e5be5f83, type: 3}

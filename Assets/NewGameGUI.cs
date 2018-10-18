@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class NewGameGUI : MonoBehaviour {
 
@@ -17,6 +18,10 @@ public class NewGameGUI : MonoBehaviour {
     void Start () {
         UpdateLabels();	
 	}
+    public void LoadMeshExample()
+    {
+        SceneManager.LoadScene("MeshTest");
+    }
     public void UpdateLabels()
     {
         labelX.text = ""+sliderX.value;

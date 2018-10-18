@@ -8,12 +8,20 @@ public class MouseInput : MonoBehaviour {
     public StoneController prefabStone;
     public Transform dummy;
     PlayController play;
-    int z = 0;    
+    int z = 0;
+
+    public bool meshMode = false;
 
     void Start () {
         play = GetComponent<PlayController>();
     }
     void Update()
+    {
+        if (meshMode) MeshUpdate();
+        else GobanUpdate();
+    }
+
+    private void MeshUpdate()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -31,6 +39,7 @@ public class MouseInput : MonoBehaviour {
             }
         }
     }
+
     void GobanUpdate()
     {
         GobanRenderer goban = play.getCurrentGoban();
