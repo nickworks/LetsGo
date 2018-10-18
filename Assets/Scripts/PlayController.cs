@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class PlayController : MonoBehaviour {
 
+    static public int sizex = 1;
+    static public int sizey = 1;
+    static public int sizez = 1;
+
     public class Stone {
         public Stone(byte x, byte y, byte z, byte val = 0)
         {
@@ -62,10 +66,6 @@ public class PlayController : MonoBehaviour {
         }
     }
 
-    public GobanRenderer getCurrentGoban()
-    {
-        return goban;
-    }
 
     Stone[,,] data;
 
@@ -79,12 +79,12 @@ public class PlayController : MonoBehaviour {
     //public bool isPlayer1Turn { get; private set; }
     public int stonesPerPlay = 1;
     public int stonesRemaining = 0;
-    GobanRenderer goban;
+    public GobanRenderer goban { get; private set; }
 
     // Use this for initialization
     void Start () {
 
-        
+        BeginGame(sizex, sizey, sizez);
     }
     public void BeginGame(int x, int y, int z)
     {

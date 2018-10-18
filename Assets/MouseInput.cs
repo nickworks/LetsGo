@@ -42,8 +42,7 @@ public class MouseInput : MonoBehaviour {
 
     void GobanUpdate()
     {
-        GobanRenderer goban = play.getCurrentGoban();
-        if (!goban) return;
+        if (!play.goban) return;
 
         if(Input.GetButton("Jump")) z += (int)(Input.mouseScrollDelta.y);
         z = Mathf.Clamp(z, 0, play.SizeZ() - 1);
@@ -62,7 +61,7 @@ public class MouseInput : MonoBehaviour {
 
             if(dummy)dummy.position = pos;
 
-            goban.Highlight(x, y, z, play.currentPlayerTurn);
+            play.goban.Highlight(x, y, z, play.currentPlayerTurn);
 
             if (play.IsVacantSpot(x, y, z))
             {

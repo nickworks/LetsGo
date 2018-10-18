@@ -6,8 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class NewGameGUI : MonoBehaviour {
 
-    public PlayController play;
-
     public Slider sliderX;
     public Slider sliderY;
     public Slider sliderZ;
@@ -30,7 +28,9 @@ public class NewGameGUI : MonoBehaviour {
     }
     public void BeginGame()
     {
-        Destroy(gameObject);
-        play.BeginGame((int)sliderX.value, (int)sliderY.value, (int)sliderZ.value);
+        PlayController.sizex = (int)sliderX.value;
+        PlayController.sizey = (int)sliderY.value;
+        PlayController.sizez = (int)sliderZ.value;
+        SceneManager.LoadScene("Goban");
     }
 }
