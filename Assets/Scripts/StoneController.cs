@@ -11,6 +11,11 @@ public class StoneController : MonoBehaviour {
     public bool showLargePreview { get; set; }
     public bool showPreview { get; set; }
 
+    List<StoneController> neighbors = new List<StoneController>();
+    public void AddNeighbor(StoneController stone)
+    {
+        if(!neighbors.Contains(stone)) neighbors.Add(stone);
+    }
     public void SetPlayer(bool isPlayer1, bool isVisible = true)
     {
         int val = 0;
@@ -25,7 +30,7 @@ public class StoneController : MonoBehaviour {
         mesh.material.color = val == 1 ? Color.black : Color.white;
 
     }
-    public void PreviewGameState(int whoseTurn)
+    public void SetPreviewState(int whoseTurn)
     {
         if (value > 0) return; // don't bother
         UpdateViews();

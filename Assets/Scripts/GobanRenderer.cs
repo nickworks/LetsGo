@@ -162,7 +162,7 @@ public class GobanRenderer : MonoBehaviour {
                 {
                     StoneController stone = stones[x, y, z];
                     if (stone.value > 0) continue;
-                    stones[x, y, z].PreviewGameState(val);
+                    stones[x, y, z].SetPreviewState(val);
                 }
             }
         }

@@ -62,9 +62,12 @@ public class CamController : MonoBehaviour {
         }
         offset += velocity * Time.deltaTime;
         offset.y = 0;
-        Vector3 pos = play.GetCenter() + offset;
-        pos = play.GetBounds().ClosestPoint(pos);
-
+        Vector3 pos = Vector3.zero + offset;
+        if (play)
+        {
+            pos = play.GetCenter() + offset;
+            pos = play.GetBounds().ClosestPoint(pos);
+        }
         transform.position = Vector3.Lerp(transform.position, pos, Time.deltaTime * moveEasing);
         
     }

@@ -15,6 +15,24 @@ public class MouseInput : MonoBehaviour {
     }
     void Update()
     {
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        Debug.DrawRay(ray.origin, ray.direction * 10);
+
+        if (Physics.Raycast(ray, out hit, float.PositiveInfinity))
+        {
+            StoneController stone = hit.collider.GetComponent<StoneController>();
+            if (stone.value == 0)
+            {
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    stone.SetGameState(1);
+                }
+            }
+        }
+    }
+    void GobanUpdate()
+    {
         GobanRenderer goban = play.getCurrentGoban();
         if (!goban) return;
 
