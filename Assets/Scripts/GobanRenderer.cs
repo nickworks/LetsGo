@@ -38,23 +38,23 @@ public class GobanRenderer : MonoBehaviour {
         {
             List<LineRenderer> bunchOfLines = new List<LineRenderer>();
             lines[z] = bunchOfLines;
-            for (int x = 0; x < sizex; x++)
+            for (int x = 0; x < sizey; x++)
             {
                 Transform obj = Instantiate(prefabLine, new Vector3(0, z, x), rotateYaw);
                 lines[z].Add(obj.GetComponent<LineRenderer>()); // here be glitches?
                 obj.localScale = Vector3.one * (sizex - 1);
             }
 
-            for (int y = 0; y < sizey; y++)
+            for (int y = 0; y < sizex; y++)
             {
                 Transform obj = Instantiate(prefabLine, new Vector3(y, z, 0), Quaternion.identity);
                 lines[z].Add(obj.GetComponent< LineRenderer>());
                 obj.localScale = Vector3.one * (sizey - 1);
             }
         }
-        for (int x = 0; x < sizex; x++)
+        for (int x = 0; x < sizey; x++)
         {
-            for (int y = 0; y < sizey; y++)
+            for (int y = 0; y < sizex; y++)
             {
                 Instantiate(prefabLine, new Vector3(y, 0, x), rotatePitch).localScale = Vector3.one * (sizez - 1);
             }

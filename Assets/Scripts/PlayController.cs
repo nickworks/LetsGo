@@ -161,6 +161,7 @@ public class PlayController : MonoBehaviour {
     /// </summary>
     public void NextTurn()
     {
+        print("next turn");
         currentPlayerTurn++;
         if (currentPlayerTurn > numberOfPlayers) currentPlayerTurn = 1;
         stonesRemaining = stonesPerPlay;
