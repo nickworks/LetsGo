@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class StoneAnimation : MonoBehaviour {
 
-    float dropSpeed = .5f;
-    float maxSpeed = 2.0f;
+    float dropSpeed = 10.5f;
+    float maxSpeed = 800.0f;
     float stoneSize = .5f;
 
     bool animComplete = false;
@@ -22,9 +22,9 @@ public class StoneAnimation : MonoBehaviour {
     }
     void DropToTheBoard()
     {
-        dropSpeed += Time.deltaTime;
+        dropSpeed += 20.0f * Time.deltaTime;
         if (dropSpeed > maxSpeed) dropSpeed = maxSpeed;
-        transform.localPosition += Vector3.down * dropSpeed;
+        transform.localPosition += Vector3.down * dropSpeed * Time.deltaTime;
         if (transform.localPosition.y <= 0)
         {
             transform.localPosition = Vector3.zero;
