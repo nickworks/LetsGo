@@ -1,6 +1,7 @@
 
 using System.Net;
 using System.Threading.Tasks;
+using System.Text;
 
 using System.Collections;
 using System.Collections.Generic;
@@ -97,27 +98,21 @@ public static class RestOGS {
     }
     public static class API {
         public static void Get_MyProfile() {
-
             Get<ResponseMyProfile>($"{pathAPI}me", (ResponseMyProfile profile) => {
 
                 Debug.Log($"Your overall rating is: {profile.ratings.overall.rating}");
 
             }, (string error) => { });
         }
-
         public static void Get_GamesList() {
-
             Get<ResponseGameList>($"{pathAPI}me/games", (ResponseGameList games) => {
 
                 GamesList gamesUI = GameObject.FindObjectOfType<GamesList>();
                 if (gamesUI) gamesUI.UpdateDisplay(games.results);
 
             }, (string error) => { });
-
         }
-
         public static void Get_FriendsList() {
-
             Get<ResponseFriendsList>($"{pathAPI}me/friends", (ResponseFriendsList friends) => {
 
                 FriendsList friendsUI = GameObject.FindObjectOfType<FriendsList>();
@@ -125,7 +120,17 @@ public static class RestOGS {
 
 
             }, (string error) => { });
+        }
+        public static void Get_PuzzleList() {
+            Get<ResponsePuzzleList>($"{pathAPI}puzzles", (ResponsePuzzleList puzzles) => {
 
+                StringBuilder sb = new StringBuilder();
+                foreach (var puzzle in puzzles.results) {
+                    sb.AppendLine(puzzle.name);
+                }
+                Debug.Log(sb.ToString());
+
+            }, (string error) => { });
         }
         public static void Post_Login(string username, string password) {
 

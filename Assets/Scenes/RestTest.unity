@@ -149,6 +149,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1508588121}
   m_Father: {fileID: 689660633}
@@ -188,6 +189,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2120278963}
   m_Father: {fileID: 901211570}
@@ -311,6 +313,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1160105459}
   m_Father: {fileID: 508038545}
@@ -349,6 +352,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1470685167}
   m_RootOrder: 0
@@ -485,6 +489,7 @@ Transform:
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -517,6 +522,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2120278963}
   m_RootOrder: 0
@@ -590,13 +596,14 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1820046648}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00007265659}
+  m_AnchoredPosition: {x: 0, y: -0.0000082138595}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &508038544
@@ -628,6 +635,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 369399715}
   m_Father: {fileID: 901211570}
@@ -682,7 +690,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1160105459}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99998367
+  m_Size: 0.9996879
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -754,6 +762,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1470685167}
   m_Father: {fileID: 1458468480}
@@ -880,6 +889,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 95151253}
   m_Father: {fileID: 1458468480}
@@ -934,7 +944,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1508588121}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99998367
+  m_Size: 0.9996879
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1039,6 +1049,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -1069,13 +1080,14 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1886510007}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000011621433}
+  m_AnchoredPosition: {x: 0, y: -0.0000082138595}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &868031132
@@ -1170,6 +1182,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 901211570}
   - {fileID: 1458468480}
@@ -1240,6 +1253,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1820046648}
   - {fileID: 358498784}
@@ -1348,6 +1362,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 369399715}
   m_RootOrder: 0
@@ -1475,6 +1490,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -1491,10 +1507,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4f1426692cd85e47bd1c26442168704, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  user: NicklesMcPickles
-  pass: moocow12
-  json: '{"count":14,"next":"https://online-go.com/api/v1/me/friends/?page=2","previous":null,"results":[{"id":849282,"username":"xavrey2","country":"un","icon":"https://secure.gravatar.com/avatar/2f496a27f6370fe02f14496e3e72aec2?s=32&d=retro","ratings":{"version":5,"overall":{"rating":1415.375508301922,"deviation":225.71773352955705,"volatility":0.06000506409995782}},"ranking":22.959056234315895,"professional":false,"ui_class":"provisional"},{"id":849291,"username":"SolomonGant1","country":"un","icon":"https://secure.gravatar.com/avatar/2761ac7bb86ec15dab5e5b9b0cd58aeb?s=32&d=retro","ratings":{"version":5,"overall":{"rating":1546.4038133942615,"deviation":244.78071289632945,"volatility":0.0599990438031369}},"ranking":25.008693389161188,"professional":false,"ui_class":"provisional"},{"id":849289,"username":"lawrencejohnsimons","country":"un","icon":"https://secure.gravatar.com/avatar/28c7b1708e47cb090ec920d1c153069a?s=32&d=retro","ratings":{"version":5,"overall":{"rating":1535.1133991279642,"deviation":245.48836017803458,"volatility":0.06000052465672072}},"ranking":24.839053408704334,"professional":false,"ui_class":"provisional"},{"id":581808,"username":"tinannette","country":"un","icon":"https://secure.gravatar.com/avatar/427086713a9c34ba934e70bcffdeb419?s=32&d=retro","ratings":{"version":5,"overall":{"rating":1117.4413740426298,"deviation":284.03819466676833,"volatility":0.060002830190676266}},"ranking":17.487477608823674,"professional":false,"ui_class":"provisional"},{"id":581801,"username":"swest1818","country":"un","icon":"https://secure.gravatar.com/avatar/0001fab2a94cd18c09c9c887b7db1cc6?s=32&d=retro","ratings":{"version":5,"overall":{"rating":831.1191626434287,"deviation":181.40474550450378,"volatility":0.06000018612180026}},"ranking":10.63452936712552,"professional":false,"ui_class":"provisional"},{"id":578644,"username":"curlyhairedmermaid","country":"us","icon":"https://b0c2ddc39d13e1c0ddad-93a52a5bc9e7cc06050c1a999beb3694.ssl.cf1.rackcdn.com/e544a8cb7b38cd081e2dbd114358c59e-32.png","ratings":{"version":5,"overall":{"rating":1079.4749619092345,"deviation":292.4539652811135,"volatility":0.06000378824213557}},"ranking":16.68725600653413,"professional":false,"ui_class":"provisional"},{"id":576570,"username":"ShadowC","country":"un","icon":"https://b0c2ddc39d13e1c0ddad-93a52a5bc9e7cc06050c1a999beb3694.ssl.cf1.rackcdn.com/c82ce186a4c5d769411f0d9aa544c28e-32.png","ratings":{"version":5,"overall":{"rating":1028.9070718424425,"deviation":175.45710404472797,"volatility":0.05999829938378305}},"ranking":15.576573803381605,"professional":false,"ui_class":"provisional"},{"id":576569,"username":"KingShenanigans","country":"un","icon":"https://secure.gravatar.com/avatar/0aa8ae00a02854e78c86f7711be9496a?s=32&d=retro","ratings":{"version":5,"overall":{"rating":972.6366090912238,"deviation":120.26730596672554,"volatility":0.06000231221319666}},"ranking":14.274574168771904,"professional":false,"ui_class":""},{"id":576566,"username":"FluffyLLC","country":"un","icon":"https://b0c2ddc39d13e1c0ddad-93a52a5bc9e7cc06050c1a999beb3694.ssl.cf1.rackcdn.com/d9ac9d80d7ddc85b72da92ed55c1ce93-32.png","ratings":{"version":5,"overall":{"rating":978.3574171120882,"deviation":150.01880981957203,"volatility":0.06000551744104497}},"ranking":14.410337870223147,"professional":false,"ui_class":""},{"id":575542,"username":"QiAnSun","country":"un","icon":"https://secure.gravatar.com/avatar/9a13a0df4a1494905e9ab20e95a4552e?s=32&d=retro","ratings":{"version":5,"overall":{"rating":1239.2536078898986,"deviation":166.60900329461512,"volatility":0.06000436814932368}},"ranking":19.882754512898117,"professional":false,"ui_class":"provisional"}]}'
-  games: []
+  user: 
+  pass: 
 --- !u!1 &1458468479
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,6 +1538,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1886510007}
   - {fileID: 588544676}
@@ -1630,6 +1645,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 426451738}
   m_Father: {fileID: 588544676}
@@ -1668,6 +1684,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 95151253}
   m_RootOrder: 0
@@ -1744,6 +1761,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 508006624}
   m_Father: {fileID: 901211570}
@@ -1834,6 +1852,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 750445462}
   m_Father: {fileID: 1458468480}
@@ -1921,6 +1940,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 493520024}
   m_Father: {fileID: 358498784}
