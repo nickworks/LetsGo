@@ -10,6 +10,7 @@ using UnityEngine.Networking.Types;
 
 public class RestTester : MonoBehaviour
 {
+
     public string user = "test-user";
     public string pass = "#dev#";
 
@@ -23,9 +24,10 @@ public class RestTesterEditor : Editor {
 
         RestTester rt = (target as RestTester);
 
-        if (GUILayout.Button("Login"))          RestOGS.Login(rt.user, rt.pass);
-        if (GUILayout.Button("List Friends"))   RestOGS.UpdateFriendsList();
-        if (GUILayout.Button("List Games"))     RestOGS.UpdateGamesList();
+        if (GUILayout.Button("Login"))              RestOGS.Login(rt.user, rt.pass);
+        if (GUILayout.Button("List My Friends"))    RestOGS.Get_FriendsList();
+        if (GUILayout.Button("List My Games"))      RestOGS.Get_GamesList();
+        if (GUILayout.Button("Get My Profile"))     RestOGS.Get_MyProfile();
 
     }
 }

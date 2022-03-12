@@ -11,6 +11,11 @@ public class ResponseFriendsList {
 }
 [System.Serializable]
 public class Friend {
+    [System.Serializable]
+    public class Rating {
+        public float version = 0;
+        public RatingStats overall;
+    }
     public int id = 0;
     public string username = "";
     public string country = "";
@@ -19,11 +24,6 @@ public class Friend {
     public bool professional = false;
     public string ui_class = "";
     public Rating ratings;
-}
-[System.Serializable]
-public class Rating {
-    public float version = 0;
-    public RatingStats overall;
 }
 [System.Serializable]
 public struct RatingStats {

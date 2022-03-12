@@ -8,12 +8,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 
 public static class RestOGS {
 
     #region Don't publish / commit values to repo
-    const string clientID = "";
-    const string clientSecret = "";
+    private const string clientID = "";
+    private const string clientSecret = "";
     #endregion
 
     public static OAuthToken token { get; private set; }
@@ -63,7 +66,29 @@ public static class RestOGS {
         return request;
     }
 
-    public static async void UpdateGamesList() {
+    public static async void Get_MyProfile() {
+
+        if (token.expires_in == 0) return; // we lost the token
+
+        UnityWebRequest request = await Get("me");
+
+        switch (request.result) {
+            case UnityWebRequest.Result.Success:
+
+                ResponseMyProfile myProfile = JsonConvert.DeserializeObject<ResponseMyProfile>(request.downloadHandler.text);
+                
+                break;
+            case UnityWebRequest.Result.InProgress:
+                break;
+            case UnityWebRequest.Result.ConnectionError:
+            case UnityWebRequest.Result.ProtocolError:
+            case UnityWebRequest.Result.DataProcessingError:
+                Debug.LogError($"{request.error}");
+                break;
+        }
+    }
+
+    public static async void Get_GamesList() {
 
         if (token.expires_in == 0) return; // we lost the token
 
@@ -71,11 +96,10 @@ public static class RestOGS {
 
         switch (request.result) {
             case UnityWebRequest.Result.Success:
-                //Debug.Log($"{request.downloadHandler.text}");
 
-                var games = JsonUtility.FromJson<ResponseGameList>(request.downloadHandler.text);
+                ResponseGameList games = JsonConvert.DeserializeObject<ResponseGameList>(request.downloadHandler.text);
 
-                var gamesUI = GameObject.FindObjectOfType<GamesList>();
+                GamesList gamesUI = GameObject.FindObjectOfType<GamesList>();
 
                 if (gamesUI) gamesUI.UpdateDisplay(games.results);
 
@@ -90,7 +114,7 @@ public static class RestOGS {
         }
     }
 
-    public static async void UpdateFriendsList() {
+    public static async void Get_FriendsList() {
 
         if (token.expires_in == 0) return; // we lost the token
 
@@ -98,8 +122,8 @@ public static class RestOGS {
 
         switch (request.result) {
             case UnityWebRequest.Result.Success:
-                //Debug.Log($"{request.downloadHandler.text}");
-                var friends = JsonUtility.FromJson<ResponseFriendsList>(request.downloadHandler.text);
+
+                ResponseFriendsList friends = JsonConvert.DeserializeObject<ResponseFriendsList>(request.downloadHandler.text);
 
                 FriendsList friendsUI = GameObject.FindObjectOfType<FriendsList>();
                 if (friendsUI) friendsUI.UpdateDisplay(friends.results);

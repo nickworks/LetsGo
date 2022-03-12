@@ -12,6 +12,11 @@ public class ResponseGameList
 }
 [System.Serializable]
 public class GameOGS {
+    [System.Serializable]
+    public class Players {
+        public Friend white;
+        public Friend black;
+    }
     public int id = 0;
     public Players players;
     public string name = "";
@@ -34,11 +39,6 @@ public class GameOGS {
     public GameDataOGS gamedata = null;
 }
 
-[System.Serializable]
-public class Players {
-    public Friend white;
-    public Friend black;
-}
 [System.Serializable]
 public class GameDataOGS {
     public bool score_stones = false;
