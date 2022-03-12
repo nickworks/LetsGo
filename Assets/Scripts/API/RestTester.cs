@@ -24,10 +24,10 @@ public class RestTesterEditor : Editor {
 
         RestTester rt = (target as RestTester);
 
-        if (GUILayout.Button("Login"))              RestOGS.Login(rt.user, rt.pass);
-        if (GUILayout.Button("List My Friends"))    RestOGS.Get_FriendsList();
-        if (GUILayout.Button("List My Games"))      RestOGS.Get_GamesList();
-        if (GUILayout.Button("Get My Profile"))     RestOGS.Get_MyProfile();
+        if (GUILayout.Button("Login"))              RestOGS.API.Post_Login(rt.user, rt.pass);
+        if (GUILayout.Button("List My Friends"))    RestOGS.API.Get_FriendsList();
+        if (GUILayout.Button("List My Games"))      RestOGS.API.Get_GamesList();
+        if (GUILayout.Button("Get My Profile"))     RestOGS.API.Get_MyProfile();
 
     }
 }
