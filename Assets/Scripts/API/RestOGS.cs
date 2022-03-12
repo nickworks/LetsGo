@@ -30,12 +30,14 @@ public static class RestOGS {
     public delegate void OnRestSuccess(string text);
     public delegate void OnRestFail(string error);
 
-    private static async void PostString(string uri, Dictionary<string, string> data = null, OnRestSuccess onSuccess = null, OnRestFail onFail = null, bool sendToken = true) {
+    private static async void PostString(string uri, Dictionary<string, string> data = null, OnRestSuccess onSuccess = null, OnRestFail onFail = null, bool sendToken = true, string method = "POST") {
         if (sendToken && token.expires_in == 0) return; // we lost the token
 
         if (data == null) data = new Dictionary<string, string>();
 
         UnityWebRequest request = UnityWebRequest.Post(uri, data); // needs trailing slash
+        request.method = method;
+
         request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         if(sendToken) request.SetRequestHeader("Authorization", $"Bearer {token.access_token}");
         UnityWebRequestAsyncOperation task = request.SendWebRequest();
@@ -131,6 +133,13 @@ public static class RestOGS {
                 Debug.Log(sb.ToString());
 
             }, (string error) => { });
+        }
+        public static void Get_ChallengeList() {
+            PostString($"{pathAPI}challenges", null, (string challenges) => {
+
+                Debug.Log(challenges);
+
+            }, (string error) => { }, true, "OPTIONS");
         }
         public static void Post_Login(string username, string password) {
 

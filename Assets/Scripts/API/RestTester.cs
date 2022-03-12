@@ -29,6 +29,7 @@ public class RestTesterEditor : Editor {
         if (GUILayout.Button("List My Games"))      RestOGS.API.Get_GamesList();
         if (GUILayout.Button("Get My Profile"))     RestOGS.API.Get_MyProfile();
         if (GUILayout.Button("List Puzzles"))       RestOGS.API.Get_PuzzleList();
+        if (GUILayout.Button("List Challenges"))    RestOGS.API.Get_ChallengeList();
 
     }
 }
