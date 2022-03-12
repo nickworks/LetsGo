@@ -95,6 +95,7 @@ public class PlayController : MonoBehaviour {
         goban.Display(data); // make visuals
 
         NextTurn(); // begin play
+
     }
 
     public Bounds GetBounds()
@@ -171,7 +172,7 @@ public class PlayController : MonoBehaviour {
     /// </summary>
     public void NextTurn()
     {
-        print("next turn");
+        //print("next turn");
         currentPlayerTurn++;
         if (currentPlayerTurn > numberOfPlayers) currentPlayerTurn = 1;
         stonesRemaining = stonesPerPlay;

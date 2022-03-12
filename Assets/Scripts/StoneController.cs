@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,11 +8,14 @@ public class StoneController : MonoBehaviour {
     public Transform preview;
     public Transform stone;
 
+    private MeshRenderer meshStone;
+    private MeshRenderer meshPreview;
+
     public int value { get; private set; }
-    public bool showLargePreview { get; set; }
-    public bool showPreview { get; set; }
+    public bool showLargePreview { get; private set; }
 
     List<StoneController> neighbors = new List<StoneController>();
+
     public void AddNeighbor(StoneController stone)
     {
         if(!neighbors.Contains(stone)) neighbors.Add(stone);
@@ -26,17 +30,21 @@ public class StoneController : MonoBehaviour {
     {
         value = val;
         UpdateViews();
-        MeshRenderer mesh = stone.GetComponentInChildren<MeshRenderer>();
-        mesh.material.color = val == 1 ? Color.black : Color.white;
-
+        if(!meshStone) meshStone = stone.GetComponentInChildren<MeshRenderer>();
+        meshStone.material.color = val == 1 ? Color.black : Color.white;
+        showLargePreview = false;
+        if (val > 0) previewSize = 0;
+    }
+    public void SetPreviewShow(bool showPreview) {
+        showLargePreview = value > 0 ? false : showPreview;
     }
     public void SetPreviewState(int whoseTurn)
     {
-        if (value > 0) return; // don't bother
+        if (value > 0) return;
         UpdateViews();
-        MeshRenderer mesh = preview.GetComponentInChildren<MeshRenderer>();
-        if (whoseTurn == 1) mesh.material.color = Color.black;
-        if (whoseTurn == 2) mesh.material.color = Color.white;
+        if(!meshPreview) meshPreview = preview.GetComponentInChildren<MeshRenderer>();
+        if (whoseTurn == 1) meshPreview.material.color = Color.black;
+        if (whoseTurn == 2) meshPreview.material.color = Color.white;
     }
     void UpdateViews()
     {
@@ -44,14 +52,16 @@ public class StoneController : MonoBehaviour {
         preview.gameObject.SetActive(value==0);
     }
 
+
     float previewSize = 0;
     void Update()
     {
         if (preview.gameObject.activeSelf)
         {
-            float scale = (showLargePreview) ? .08f : .005f;
+            float scale = (showLargePreview) ? .08f : .00f;
             previewSize = Mathf.Lerp(previewSize, scale, Time.deltaTime * 5);
             preview.localScale = Vector3.one * previewSize;
         }
     }
+
 }

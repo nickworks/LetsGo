@@ -22,7 +22,7 @@ public class StoneAnimation : MonoBehaviour {
     }
     void DropToTheBoard()
     {
-        dropSpeed += 20.0f * Time.deltaTime;
+        dropSpeed += 100.0f * Time.deltaTime;
         if (dropSpeed > maxSpeed) dropSpeed = maxSpeed;
         transform.localPosition += Vector3.down * dropSpeed * Time.deltaTime;
         if (transform.localPosition.y <= 0)

@@ -142,8 +142,10 @@ public class GobanRenderer : MonoBehaviour {
                     StoneController stone = stones[x, y, z];
                     if (stone.value > 0) continue;
                     stone.gameObject.SetActive(tz == z);
-                    stone.showLargePreview = (tx == x && ty == y && tz == z);
-                    //stones[x, y, z].PreviewGameState(whosTurn);
+
+                    bool isHover = (tx == x && ty == y && tz == z);
+                    if(isHover) stones[x, y, z].SetPreviewState(whosTurn);
+                    stones[x, y, z].SetPreviewShow(isHover);
                 }
             }
         }
@@ -151,6 +153,7 @@ public class GobanRenderer : MonoBehaviour {
     }
     public void ChangePlayerTurn(int val)
     {
+        return;
         int sizex = stones.GetLength(0);
         int sizey = stones.GetLength(1);
         int sizez = stones.GetLength(2);
@@ -160,9 +163,7 @@ public class GobanRenderer : MonoBehaviour {
             {
                 for (int z = 0; z < sizez; z++)
                 {
-                    StoneController stone = stones[x, y, z];
-                    if (stone.value > 0) continue;
-                    stones[x, y, z].SetPreviewState(val);
+                    if (stones[x, y, z].value == 0) stones[x, y, z].SetPreviewState(val);
                 }
             }
         }
