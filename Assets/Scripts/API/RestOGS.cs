@@ -66,77 +66,63 @@ public static class RestOGS {
         return request;
     }
 
-    public static async void Get_MyProfile() {
 
+    public delegate void OnRestSuccess<T>(T obj);
+    public delegate void OnRestFail(string error);
+
+
+    private static async void Send<T>(string uri, OnRestSuccess<T> onSuccess, OnRestFail onFail) {
         if (token.expires_in == 0) return; // we lost the token
 
-        UnityWebRequest request = await Get("me");
+        UnityWebRequest request = await Get(uri);
 
         switch (request.result) {
             case UnityWebRequest.Result.Success:
 
-                ResponseMyProfile myProfile = JsonConvert.DeserializeObject<ResponseMyProfile>(request.downloadHandler.text);
-                
+                if(onSuccess != null) onSuccess(JsonConvert.DeserializeObject<T>(request.downloadHandler.text));
+
                 break;
             case UnityWebRequest.Result.InProgress:
+                // this shouldn't happen
                 break;
             case UnityWebRequest.Result.ConnectionError:
             case UnityWebRequest.Result.ProtocolError:
             case UnityWebRequest.Result.DataProcessingError:
                 Debug.LogError($"{request.error}");
+                if (onFail != null) onFail(request.error);
                 break;
         }
     }
 
-    public static async void Get_GamesList() {
+    public static void Get_MyProfile() {
 
-        if (token.expires_in == 0) return; // we lost the token
+        Send<ResponseMyProfile>("me", (ResponseMyProfile profile)=> {
 
-        UnityWebRequest request = await Get("me/games/");
-
-        switch (request.result) {
-            case UnityWebRequest.Result.Success:
-
-                ResponseGameList games = JsonConvert.DeserializeObject<ResponseGameList>(request.downloadHandler.text);
-
-                GamesList gamesUI = GameObject.FindObjectOfType<GamesList>();
-
-                if (gamesUI) gamesUI.UpdateDisplay(games.results);
-
-                break;
-            case UnityWebRequest.Result.InProgress:
-                break;
-            case UnityWebRequest.Result.ConnectionError:
-            case UnityWebRequest.Result.ProtocolError:
-            case UnityWebRequest.Result.DataProcessingError:
-                Debug.LogError($"{request.error}");
-                break;
-        }
+            Debug.Log($"Your overall rating is: {profile.ratings.overall.rating}");
+        
+        }, (string error) => { });
     }
 
-    public static async void Get_FriendsList() {
+    public static void Get_GamesList() {
 
-        if (token.expires_in == 0) return; // we lost the token
+        Send<ResponseGameList>("me/games", (ResponseGameList games) => {
 
-        UnityWebRequest request = await Get("me/friends/");
+            GamesList gamesUI = GameObject.FindObjectOfType<GamesList>();
+            if (gamesUI) gamesUI.UpdateDisplay(games.results);
 
-        switch (request.result) {
-            case UnityWebRequest.Result.Success:
+        }, (string error) => { });
 
-                ResponseFriendsList friends = JsonConvert.DeserializeObject<ResponseFriendsList>(request.downloadHandler.text);
-
-                FriendsList friendsUI = GameObject.FindObjectOfType<FriendsList>();
-                if (friendsUI) friendsUI.UpdateDisplay(friends.results);
-
-                break;
-            case UnityWebRequest.Result.InProgress:
-                break;
-            case UnityWebRequest.Result.ConnectionError:
-            case UnityWebRequest.Result.ProtocolError:
-            case UnityWebRequest.Result.DataProcessingError:
-                Debug.LogError(request.error);
-                break;
-        }
     }
 
+    public static void Get_FriendsList() {
+
+        Send<ResponseFriendsList>("me/friends", (ResponseFriendsList friends) => {
+
+            FriendsList friendsUI = GameObject.FindObjectOfType<FriendsList>();
+            if (friendsUI) friendsUI.UpdateDisplay(friends.results);
+
+
+        }, (string error) => { });
+    
+    }
 }
