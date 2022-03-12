@@ -30,18 +30,17 @@ public static class RestOGS {
     public delegate void OnRestSuccess(string text);
     public delegate void OnRestFail(string error);
 
-    private static async void PostString(string uri, Dictionary<string, string> data = null, OnRestSuccess onSuccess = null, OnRestFail onFail = null, bool sendToken = true, string method = "POST") {
+    private static async void PostString(string uri, List<IMultipartFormSection> data = null, OnRestSuccess onSuccess = null, OnRestFail onFail = null, bool sendToken = true, string method = "POST") {
         if (sendToken && token.expires_in == 0) return; // we lost the token
 
-        if (data == null) data = new Dictionary<string, string>();
+        if (data == null) data = MakeData();
 
-        UnityWebRequest request = UnityWebRequest.Post(uri, data); // needs trailing slash
+        byte[] boundary = UnityWebRequest.GenerateBoundary();
+        UnityWebRequest request = UnityWebRequest.Post(uri, data, boundary);
         request.method = method;
-
-        request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         if(sendToken) request.SetRequestHeader("Authorization", $"Bearer {token.access_token}");
-        UnityWebRequestAsyncOperation task = request.SendWebRequest();
 
+        UnityWebRequestAsyncOperation task = request.SendWebRequest();
         while (!task.isDone) await Task.Yield();
 
         switch (request.result) {
@@ -93,21 +92,32 @@ public static class RestOGS {
             if (onSuccess != null) onSuccess(JsonConvert.DeserializeObject<T>(text));
         }, onFail, sendToken);
     }
-    private static void Post<T>(string uri, Dictionary<string, string> data = null, OnRestSuccess<T> onSuccess = null, OnRestFail onFail = null, bool sendToken = true) {
+    private static void Post<T>(string uri, List<IMultipartFormSection> data = null, OnRestSuccess<T> onSuccess = null, OnRestFail onFail = null, bool sendToken = true) {
         PostString(uri, data, (string text) => {
             if (onSuccess != null) onSuccess(JsonConvert.DeserializeObject<T>(text));
         }, onFail, sendToken);
     }
+    public static List<IMultipartFormSection> MakeData(){
+        return new List<IMultipartFormSection>();
+    }
+    public static List<IMultipartFormSection> Add(this List<IMultipartFormSection> data, string key, string value){
+        data.Add(new MultipartFormDataSection(key, value));
+        return data;
+    }
+    public static List<IMultipartFormSection> Add(this List<IMultipartFormSection> data, string key, float value){
+        data.Add(new MultipartFormDataSection(key, System.BitConverter.GetBytes(value)));
+        return data;
+    }
     public static class API {
         public static void Get_MyProfile() {
-            Get<ResponseMyProfile>($"{pathAPI}me", (ResponseMyProfile profile) => {
+            Get<ResponseMyProfile>($"{pathAPI}me", (profile) => {
 
                 Debug.Log($"Your overall rating is: {profile.ratings.overall.rating}");
 
             }, (string error) => { });
         }
         public static void Get_GamesList() {
-            Get<ResponseGameList>($"{pathAPI}me/games", (ResponseGameList games) => {
+            Get<ResponseGameList>($"{pathAPI}me/games", (games) => {
 
                 GamesList gamesUI = GameObject.FindObjectOfType<GamesList>();
                 if (gamesUI) gamesUI.UpdateDisplay(games.results);
@@ -115,7 +125,7 @@ public static class RestOGS {
             }, (string error) => { });
         }
         public static void Get_FriendsList() {
-            Get<ResponseFriendsList>($"{pathAPI}me/friends", (ResponseFriendsList friends) => {
+            Get<ResponseFriendsList>($"{pathAPI}me/friends", (friends) => {
 
                 FriendsList friendsUI = GameObject.FindObjectOfType<FriendsList>();
                 if (friendsUI) friendsUI.UpdateDisplay(friends.results);
@@ -124,7 +134,7 @@ public static class RestOGS {
             }, (string error) => { });
         }
         public static void Get_PuzzleList() {
-            Get<ResponsePuzzleList>($"{pathAPI}puzzles", (ResponsePuzzleList puzzles) => {
+            Get<ResponsePuzzleList>($"{pathAPI}puzzles", (puzzles) => {
 
                 StringBuilder sb = new StringBuilder();
                 foreach (var puzzle in puzzles.results) {
@@ -135,15 +145,12 @@ public static class RestOGS {
             }, (string error) => { });
         }
         public static void Get_ChallengeList() {
-            PostString($"{pathAPI}challenges", null, (string challenges) => {
 
-                Debug.Log(challenges);
-
-            }, (string error) => { }, true, "OPTIONS");
+            
         }
         public static void Post_Login(string username, string password) {
 
-            Dictionary<string, string> data = new Dictionary<string, string>();
+            List<IMultipartFormSection> data = MakeData();
             data.Add("client_id", clientID);
             data.Add("client_secret", clientSecret);
             data.Add("grant_type", "password");
