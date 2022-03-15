@@ -136,11 +136,16 @@ public static class RestOGS {
         public static void Get_PuzzleList() {
             Get<ResponsePuzzleList>($"{pathAPI}puzzles", (puzzles) => {
 
-                StringBuilder sb = new StringBuilder();
-                foreach (var puzzle in puzzles.results) {
-                    sb.AppendLine(puzzle.name);
-                }
-                Debug.Log(sb.ToString());
+                ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
+                if (uiScrollContent) uiScrollContent.ShowPuzzles(puzzles.results);
+
+            }, (string error) => { });
+        }
+        public static void Get_PuzzleCollectionList() {
+            Get<ResponsePuzzleCollection>($"{pathAPI}puzzles/collections?ordering=-rating", (puzzles) => {
+
+                ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
+                if (uiScrollContent) uiScrollContent.ShowPuzzles(puzzles.results);
 
             }, (string error) => { });
         }

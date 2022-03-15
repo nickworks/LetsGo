@@ -10,7 +10,9 @@ public class ProfileCard : MonoBehaviour
     public TextMeshProUGUI text;
     public Image image;
 
-    public void UpdateView(Friend f) {
+    public void UpdateView(Friend f)
+    {
+
         text.text = f.username;
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(f.icon);
 
