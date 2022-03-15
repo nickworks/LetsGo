@@ -82,4 +82,31 @@ public class SocketOGS {
         
         socket = null;
     }
+
+    public void StartSeekGraph(){
+        if(!socket.Connected) return;
+         socket.Emit("seek_graph/connect", new {channel="global"});
+    }
+    public void StopSeekGraph(){
+        if(!socket.Connected) return;
+        socket.Emit("seek_graph/disconnect");
+    }
+    public void FetchGames(){
+        if(!socket.Connected) return;
+        socket.EmitAsync("gamelist/query", (response)=>{
+            string text = response.GetValue().ToString();
+            ResponseGameQuery games = JsonConvert.DeserializeObject<ResponseGameQuery>(text);
+
+            foreach(var game in games.results){
+                Debug.Log(game.name);
+            }
+
+        },new{
+            list="live",
+            sort_by="rank",
+            from=0,
+            limit=5
+        });
+    }
+
 }

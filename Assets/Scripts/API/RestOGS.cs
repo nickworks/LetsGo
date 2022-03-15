@@ -144,10 +144,6 @@ public static class RestOGS {
 
             }, (string error) => { });
         }
-        public static void Get_ChallengeList() {
-
-            
-        }
         public static void Post_Login(string username, string password) {
 
             List<IMultipartFormSection> data = MakeData();

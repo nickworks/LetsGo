@@ -13,9 +13,6 @@ public class NetController : MonoBehaviour
     void Start(){
         socket = new SocketOGS();
     }
-    public void ConnectSocket(){
-        socket.Connect();
-    }
     void OnDestroy(){
         socket.Disconnect();
         socket = null;
@@ -41,20 +38,13 @@ public class NetControllerEditor : Editor {
         GUILayout.Space(15);
         GUILayout.Label("Real-time API");
         GUILayout.Space(10);
-        if (GUILayout.Button("Connect Socket"))     rt.ConnectSocket();
+        if (GUILayout.Button("Connect Socket"))     rt.socket.Connect();
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Start SeekGraph"))    rt.socket.socket.Emit("seek_graph/connect", new {channel="global"});
-        if (GUILayout.Button("Stop SeekGraph"))    rt.socket.socket.Emit("seek_graph/disconnect", new {channel="global"});
+        if (GUILayout.Button("Start SeekGraph"))   rt.socket.StartSeekGraph();
+        if (GUILayout.Button("Stop SeekGraph"))    rt.socket.StopSeekGraph();
         GUILayout.EndHorizontal();
         
-        if (GUILayout.Button("Fetch Live Games"))    rt.socket.socket.EmitAsync("gamelist/query", (response)=>{
-            Debug.Log(response.GetValue().ToString());
-        },new{
-            list="live",
-            sort_by="rank",
-            from=0,
-            limit=5
-        });
+        if (GUILayout.Button("Fetch Live Games"))    rt.socket.FetchGames();
         
     }
 }
