@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class ResponsePuzzleList
 {
-    [System.Serializable]
+    [Serializable]
     public class Puzzle {
         public int id;
         public string name;

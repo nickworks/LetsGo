@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class ResponseGameList
 {
     public int count = 0;
@@ -10,9 +8,9 @@ public class ResponseGameList
     public string prev = "";
     public GameOGS[] results = new GameOGS[0];
 }
-[System.Serializable]
+[Serializable]
 public class GameOGS {
-    [System.Serializable]
+    [Serializable]
     public class Players {
         public Friend white;
         public Friend black;
@@ -39,7 +37,7 @@ public class GameOGS {
     public GameDataOGS gamedata = null;
 }
 
-[System.Serializable]
+[Serializable]
 public class GameDataOGS {
     public bool score_stones = false;
     public float time_canadian_moves = 0;

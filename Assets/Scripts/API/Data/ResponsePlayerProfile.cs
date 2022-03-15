@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class ResponsePlayerProfile
 {
-    [System.Serializable]
+    [Serializable]
     public class RelatedLinks {
         public string challenge = ""; // POST : challenge this player!
         public string games = "";

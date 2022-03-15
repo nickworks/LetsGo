@@ -42,8 +42,19 @@ public class NetControllerEditor : Editor {
         GUILayout.Label("Real-time API");
         GUILayout.Space(10);
         if (GUILayout.Button("Connect Socket"))     rt.ConnectSocket();
-        if (GUILayout.Button("Start Games List"))    rt.socket.socket.Emit("seek_graph/connect", new {channel="global"});
-        if (GUILayout.Button("Stop Games List"))    rt.socket.socket.Emit("seek_graph/disconnect", new {channel="global"});
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Start SeekGraph"))    rt.socket.socket.Emit("seek_graph/connect", new {channel="global"});
+        if (GUILayout.Button("Stop SeekGraph"))    rt.socket.socket.Emit("seek_graph/disconnect", new {channel="global"});
+        GUILayout.EndHorizontal();
+        
+        if (GUILayout.Button("Fetch Live Games"))    rt.socket.socket.EmitAsync("gamelist/query", (response)=>{
+            Debug.Log(response.GetValue().ToString());
+        },new{
+            list="live",
+            sort_by="rank",
+            from=0,
+            limit=5
+        });
         
     }
 }

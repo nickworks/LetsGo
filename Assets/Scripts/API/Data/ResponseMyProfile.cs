@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+using System;
 using Newtonsoft.Json;
 
-[System.Serializable]
+[Serializable]
 public class ResponseMyProfile
 {
+    [Serializable]
     public class Rating {
         public float version = 0;
         public RatingStats overall;

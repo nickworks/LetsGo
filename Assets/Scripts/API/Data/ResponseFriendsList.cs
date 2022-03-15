@@ -1,17 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class ResponseFriendsList {
     public int count = 0;
     public string next = "";
     public string prev = "";
     public Friend[] results = new Friend[0];
 }
-[System.Serializable]
+[Serializable]
 public class Friend {
-    [System.Serializable]
+    [Serializable]
     public class Rating {
         public float version = 0;
         public RatingStats overall;
@@ -25,7 +23,7 @@ public class Friend {
     public string ui_class = "";
     public Rating ratings;
 }
-[System.Serializable]
+[Serializable]
 public struct RatingStats {
     public float rating;
     public float deviation;
