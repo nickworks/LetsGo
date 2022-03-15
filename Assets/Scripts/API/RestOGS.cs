@@ -119,16 +119,16 @@ public static class RestOGS {
         public static void Get_GamesList() {
             Get<ResponseGameList>($"{pathAPI}me/games", (games) => {
 
-                GamesList gamesUI = GameObject.FindObjectOfType<GamesList>();
-                if (gamesUI) gamesUI.UpdateDisplay(games.results);
+                ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
+                if (uiScrollContent) uiScrollContent.ShowMyGames(games.results);
 
             }, (string error) => { });
         }
         public static void Get_FriendsList() {
             Get<ResponseFriendsList>($"{pathAPI}me/friends", (friends) => {
 
-                FriendsList friendsUI = GameObject.FindObjectOfType<FriendsList>();
-                if (friendsUI) friendsUI.UpdateDisplay(friends.results);
+                ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
+                if (uiScrollContent) uiScrollContent.ShowFriends(friends.results);
 
 
             }, (string error) => { });
