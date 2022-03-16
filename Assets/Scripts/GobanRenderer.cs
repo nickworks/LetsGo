@@ -10,6 +10,9 @@ public class GobanRenderer : MonoBehaviour {
     public Transform prefabLine;
 
     List<LineRenderer>[] lines; // an array of lists
+    Vector3 lineOffset = new Vector3(0,-.14f,0);
+
+    MeshFilter mesh;
 
     void SpawnStones(int sizex, int sizey, int sizez)
     {
@@ -40,14 +43,14 @@ public class GobanRenderer : MonoBehaviour {
             lines[z] = bunchOfLines;
             for (int x = 0; x < sizey; x++)
             {
-                Transform obj = Instantiate(prefabLine, new Vector3(0, z, x), rotateYaw);
+                Transform obj = Instantiate(prefabLine, lineOffset + new Vector3(0, z, x), rotateYaw);
                 lines[z].Add(obj.GetComponent<LineRenderer>()); // here be glitches?
                 obj.localScale = Vector3.one * (sizex - 1);
             }
 
             for (int y = 0; y < sizex; y++)
             {
-                Transform obj = Instantiate(prefabLine, new Vector3(y, z, 0), Quaternion.identity);
+                Transform obj = Instantiate(prefabLine, lineOffset + new Vector3(y, z, 0), Quaternion.identity);
                 lines[z].Add(obj.GetComponent< LineRenderer>());
                 obj.localScale = Vector3.one * (sizey - 1);
             }
@@ -56,31 +59,9 @@ public class GobanRenderer : MonoBehaviour {
         {
             for (int y = 0; y < sizex; y++)
             {
-                Instantiate(prefabLine, new Vector3(y, 0, x), rotatePitch).localScale = Vector3.one * (sizez - 1);
+                Instantiate(prefabLine, lineOffset + new Vector3(y, 0, x), rotatePitch).localScale = Vector3.one * (sizez - 1);
             }
         }
-
-        /*
-        sizex--;
-        sizey--;
-        sizez--;
-        Instantiate(prefabLine, new Vector3(0, 0, 0), Quaternion.identity).localScale = Vector3.one * y;
-        Instantiate(prefabLine, new Vector3(x, 0, 0), Quaternion.identity).localScale = Vector3.one * y;
-        Instantiate(prefabLine, new Vector3(x, z, 0), Quaternion.identity).localScale = Vector3.one * y;
-        Instantiate(prefabLine, new Vector3(0, z, 0), Quaternion.identity).localScale = Vector3.one * y;
-        
-        Quaternion rotateYaw = Quaternion.Euler(0, 90, 0);
-        Instantiate(prefabLine, new Vector3(0, 0, 0), rotateYaw).localScale = Vector3.one * x;
-        Instantiate(prefabLine, new Vector3(0, 0, y), rotateYaw).localScale = Vector3.one * x;
-        Instantiate(prefabLine, new Vector3(0, z, y), rotateYaw).localScale = Vector3.one * x;
-        Instantiate(prefabLine, new Vector3(0, z, 0), rotateYaw).localScale = Vector3.one * x;
-        
-        Quaternion rotatePitch = Quaternion.Euler(90, 0, 0);
-        Instantiate(prefabLine, new Vector3(x, z, 0), rotatePitch).localScale = Vector3.one * z;
-        Instantiate(prefabLine, new Vector3(x, z, y), rotatePitch).localScale = Vector3.one * z;
-        Instantiate(prefabLine, new Vector3(0, z, y), rotatePitch).localScale = Vector3.one * z;
-        Instantiate(prefabLine, new Vector3(0, z, 0), rotatePitch).localScale = Vector3.one * z;
-        */
 
     }
     /// <summary>
@@ -97,6 +78,11 @@ public class GobanRenderer : MonoBehaviour {
         {
             SpawnStones(sizex, sizey, sizez);
             SpawnLines(sizex, sizey, sizez);
+            mesh = GetComponentInChildren<MeshFilter>();
+            if(mesh) {
+                mesh.transform.localScale = new Vector3(sizex, .5f, sizey);
+                mesh.transform.position = new Vector3(sizex/2,-.4f,sizey/2);
+            }
         }
 
         for (int x = 0; x < sizex; x++)
@@ -111,6 +97,7 @@ public class GobanRenderer : MonoBehaviour {
             }
         }
         //ghost.SetGameState((byte)(isPlayer1Turn ? 1 : 2));
+
     }
 
     StoneController highlight;

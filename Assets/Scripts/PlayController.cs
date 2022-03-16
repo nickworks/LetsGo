@@ -7,7 +7,7 @@ using UnityEditor;
 public class PlayController : MonoBehaviour {
 
     static public int sizex = 9;
-    static public int sizey = 9;
+    static public int sizey = 19;
     static public int sizez = 1;
 
     public class Stone {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class CamController : MonoBehaviour {
 
     float pitch = 45;
     float yaw = 10;
+    public Transform theDummy;
 
     public float sensitivityX = 1;
     public float sensitivityY = 1;
@@ -43,8 +45,29 @@ public class CamController : MonoBehaviour {
     {
         Dolly();
         Orbit();
-
         Ease();
+        if(Input.GetButton("Look at Dummy")) MoveToDummy();
+    }
+
+    private void MoveToDummy()
+    {
+        /*
+        // this is in world space
+        // camera movement needs to be measured in screen space
+        
+        Vector3 vToDummy = (theDummy.position - (transform.position + offset));
+        float k = vToDummy.magnitude;
+        
+
+        if (k > 3){
+            k = (k - 3)/5;
+            if(k > 2) k = 2;
+        } else {
+            k = 0;
+        }
+
+        offset +=  vToDummy * Time.deltaTime * k;
+        */
     }
 
     private void Ease()

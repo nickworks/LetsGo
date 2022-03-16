@@ -95,7 +95,7 @@ public class MouseInput : MonoBehaviour {
             int x = (int)Mathf.Round(pos.x);
             int y = (int)Mathf.Round(pos.z);
 
-            if(dummy)dummy.position = pos;
+            if(dummy)dummy.position = pos; 
 
             play.goban.Highlight(x, y, z, play.currentPlayerTurn);
 
@@ -106,6 +106,7 @@ public class MouseInput : MonoBehaviour {
                     play.PlayStoneAt(x, y, z);
                 }
             }
+            
         }
     }
 }

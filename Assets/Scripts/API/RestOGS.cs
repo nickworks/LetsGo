@@ -16,8 +16,8 @@ using Newtonsoft.Json.Converters;
 public static class RestOGS {
 
     #region Don't publish / commit values to repo
-    private const string clientID = "";
-    private const string clientSecret = "";
+    private const string clientID = @"";
+    private const string clientSecret = @"";
     #endregion
 
     private const string pathAPI = @"https://online-go.com/api/v1/";
