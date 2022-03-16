@@ -149,6 +149,33 @@ public static class RestOGS {
 
             }, (string error) => { });
         }
+        // this loads a specific puzzle
+        public static void Get_Puzzle(int puzzle_id){
+            Get<ResponsePuzzle>($"{pathAPI}puzzles/{puzzle_id}", (puzzle) => {
+
+                Debug.Log($"The puzzle -- {puzzle.name} -- was created by {puzzle.owner.username}");
+
+            }, (string error) => { });
+        }
+        // this loads the id / name of each puzzle in a collection
+        public static void Get_PuzzleCollectionSummary(int puzzle_id){
+            Get<ResponsePuzzleSummary.Puzzle[]>($"{pathAPI}puzzles/{puzzle_id}/collection_summary", (summary) => {
+
+                Debug.Log($"There are {summary.Length} puzzles in this collection.");
+
+            }, (string error) => { });
+        }
+        public static void Get_PuzzleRate(int puzzle_id){
+            Get<ResponsePuzzleRate>($"{pathAPI}puzzles/{puzzle_id}/rate", (rating) => {
+
+                if(rating.error != ""){
+                    Debug.Log("You have not rated this puzzle.");
+                } else {
+                    Debug.Log($"You rated this puzzle {rating.rating} stars.");
+                }
+
+            }, (string error) => { });
+        }
         public static void Post_Login(string username, string password) {
 
             List<IMultipartFormSection> data = MakeData();

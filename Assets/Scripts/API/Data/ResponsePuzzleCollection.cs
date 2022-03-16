@@ -7,6 +7,7 @@ public class ResponsePuzzleCollection {
     public string next;
     public string previous;
     public PuzzleCollection[] results;
+    [Serializable]
     public class PuzzleCollection {
         public class Owner {
             public int id;
