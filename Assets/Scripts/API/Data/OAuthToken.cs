@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public struct OAuthToken
+public class OAuthToken
 {
     public string access_token;
     public int expires_in;

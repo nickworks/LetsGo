@@ -54,6 +54,9 @@ public class PlayController : MonoBehaviour {
         if(singleton == this) singleton = null;
     }
     private void MakeFreshGoban(int x, int y, int z){
+
+        history.Clear();
+
         MakeData(x,y,z); // make data
 
         if (goban) Destroy(goban.gameObject);
@@ -111,6 +114,7 @@ public class PlayController : MonoBehaviour {
         ApplySGF(puzzle.puzzle.initial_state.black, 1);
         goban.Display(data);
 
+        PanelSwitcher.singleton.ShowHUD();
             //RestOGS.API.Get_PuzzleCollectionSummary(id);
             //RestOGS.API.Get_PuzzleRate(id);
     }

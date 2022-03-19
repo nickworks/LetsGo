@@ -13,6 +13,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 
+public enum Ordering {
+        HighestRating,
+        LowestDifficulty,
+        HighestDifficulty,
+        Newest,
+        Oldest
+    }
 public static class RestOGS {
 
     #region Don't publish / commit values to repo
@@ -62,8 +69,15 @@ public static class RestOGS {
     public static void Get_PuzzleList(OnRestSuccess<ResponsePuzzleList> onSuccess, OnRestFail onFail = null) {
         Get<ResponsePuzzleList>($"{pathAPI}puzzles", onSuccess, onFail);
     }
-    public static void Get_PuzzleCollectionList(OnRestSuccess<ResponsePuzzleCollection> onSuccess, OnRestFail onFail = null) {
-        Get<ResponsePuzzleCollection>($"{pathAPI}puzzles/collections?ordering=-rating", onSuccess, (string error) => { });
+    public static void Get_PuzzleCollectionList(Ordering order, OnRestSuccess<ResponsePuzzleCollection> onSuccess, OnRestFail onFail = null) {
+
+        string ordering = "-rating";
+        if(order == Ordering.HighestDifficulty) ordering = "-min_rank,-max_rank";
+        if(order == Ordering.LowestDifficulty) ordering = "min_rank,max_rank";
+        if(order == Ordering.Newest) ordering = "-created";
+        if(order == Ordering.Oldest) ordering = "+created";
+
+        Get<ResponsePuzzleCollection>($"{pathAPI}puzzles/collections?ordering={ordering}", onSuccess, (string error) => { });
     }
     // this loads a specific puzzle
     public static void Get_Puzzle(int puzzle_id, OnRestSuccess<ResponsePuzzle> onSuccess, OnRestFail onFail = null){
@@ -123,11 +137,11 @@ public static class RestOGS {
     // awaits for a response, and then triggers
     // either onSuccess or onFail
     private static async void GetString(string uri, OnRestSuccess onSuccess = null, OnRestFail onFail = null, bool sendToken = true) {
-        if (sendToken && token.expires_in == 0) return; // we lost the token
+        if (sendToken && token != null && token.expires_in == 0) return; // we lost the token
 
         UnityWebRequest request = UnityWebRequest.Get(uri);
         request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        if (sendToken) request.SetRequestHeader("Authorization", $"Bearer {token.access_token}");
+        if (sendToken && token != null) request.SetRequestHeader("Authorization", $"Bearer {token.access_token}");
         UnityWebRequestAsyncOperation task = request.SendWebRequest();
 
         while (!task.isDone) await Task.Yield();
@@ -137,6 +151,7 @@ public static class RestOGS {
     private static void Get<T>(string uri, OnRestSuccess<T> onSuccess = null, OnRestFail onFail = null, bool sendToken = true) {
         GetString(uri, (string text) => {
             if (onSuccess != null) {
+                Debug.Log(text);
                 T obj = JsonConvert.DeserializeObject<T>(text);
                 onSuccess(obj);
             }

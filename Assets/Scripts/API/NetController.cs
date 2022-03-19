@@ -36,27 +36,24 @@ public class NetControllerEditor : Editor {
 
         if (GUILayout.Button("Login")) RestOGS.Login(rt.user, rt.pass, (s)=>{});
 
-        if (GUILayout.Button("List My Friends")) RestOGS.Get_FriendsList((friends) => {
-
-            ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
-            if (uiScrollContent) uiScrollContent.ShowFriends(friends.results);
-
-        });
-        if (GUILayout.Button("List My Games")) RestOGS.Get_GamesList((games) => {
-
-            ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
-            if (uiScrollContent) uiScrollContent.ShowMyGames(games.results);
-
-        });
+        if (GUILayout.Button("List My Friends")) RestOGS.Get_FriendsList((friends) => { });
+        if (GUILayout.Button("List My Games")) RestOGS.Get_GamesList((games) => { });
         if (GUILayout.Button("Get My Profile")) RestOGS.Get_MyProfile(profile => { });
-        if (GUILayout.Button("List Puzzles")) RestOGS.Get_PuzzleCollectionList((puzzles) => {
-
-            ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
-            if (uiScrollContent) uiScrollContent.ShowPuzzles(puzzles.results);
+        
+        if (GUILayout.Button("List Puzzles")) RestOGS.Get_PuzzleCollectionList(Ordering.HighestRating, (puzzles) => {
+            //ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
+            //if (uiScrollContent) uiScrollContent.ShowPuzzles(puzzles.results);
 
         });
         
-        if(GUILayout.Button("Load JSON puzzle")) PlayController.singleton.BeginPuzzle(rt.json);
+        if (GUILayout.Button("Load JSON puzzle")) PlayController.singleton.BeginPuzzle(rt.json);
+        if (GUILayout.Button("List JSON Puzzles")) {
+
+            var games = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponsePuzzleCollection>(rt.json);
+
+            //ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
+            //if (uiScrollContent) uiScrollContent.ShowPuzzles(games.results);
+        }
 
         GUILayout.Space(15);
         GUILayout.Label("Real-time API");
