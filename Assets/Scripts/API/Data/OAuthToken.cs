@@ -10,8 +10,4 @@ public struct OAuthToken
     public string token_type;
     public string scope;
     public string refresh_token;
-
-    public static OAuthToken From(string json) {
-        return JsonUtility.FromJson<OAuthToken>(json);
-    }
 }

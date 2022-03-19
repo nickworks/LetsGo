@@ -28,9 +28,9 @@ public class NewGameGUI : MonoBehaviour {
     }
     public void BeginGame()
     {
-        PlayController.sizex = (int)sliderX.value;
-        PlayController.sizey = (int)sliderY.value;
-        PlayController.sizez = (int)sliderZ.value;
+        //PlayController.sizex = (int)sliderX.value;
+        //PlayController.sizey = (int)sliderY.value;
+        //PlayController.sizez = (int)sliderZ.value;
         SceneManager.LoadScene("Goban");
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System;
 
@@ -12,6 +13,7 @@ public class ScrollContentMgr : MonoBehaviour
     public GameCard PrefabGameCard;
 
     public RectTransform scrollContent;
+    public Button undoButton;
 
     private void Clear(){
         for(int i = 0; i < scrollContent.childCount; i++){
@@ -44,5 +46,9 @@ public class ScrollContentMgr : MonoBehaviour
             y -= (rt.sizeDelta.y + margin); // move down height + 10
             callback(newCard, datum);
         }
+    }
+    public void Undo(){
+        PlayController.singleton.PrevTurn();
+        //undoButton.enabled = PlayController.singleton.HasHistory;
     }
 }

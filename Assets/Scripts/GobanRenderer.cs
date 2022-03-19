@@ -24,7 +24,7 @@ public class GobanRenderer : MonoBehaviour {
                 for (int z = 0; z < sizez; z++)
                 {
                     Vector3 pos = new Vector3(x, z, y);
-                    stones[x, y, z] = Instantiate(prefabStone, pos, Quaternion.identity);
+                    stones[x, y, z] = Instantiate(prefabStone, pos, Quaternion.identity, transform);
                 }
             }
         }
@@ -43,14 +43,14 @@ public class GobanRenderer : MonoBehaviour {
             lines[z] = bunchOfLines;
             for (int x = 0; x < sizey; x++)
             {
-                Transform obj = Instantiate(prefabLine, lineOffset + new Vector3(0, z, x), rotateYaw);
+                Transform obj = Instantiate(prefabLine, lineOffset + new Vector3(0, z, x), rotateYaw, transform);
                 lines[z].Add(obj.GetComponent<LineRenderer>()); // here be glitches?
                 obj.localScale = Vector3.one * (sizex - 1);
             }
 
             for (int y = 0; y < sizex; y++)
             {
-                Transform obj = Instantiate(prefabLine, lineOffset + new Vector3(y, z, 0), Quaternion.identity);
+                Transform obj = Instantiate(prefabLine, lineOffset + new Vector3(y, z, 0), Quaternion.identity, transform);
                 lines[z].Add(obj.GetComponent< LineRenderer>());
                 obj.localScale = Vector3.one * (sizey - 1);
             }
@@ -59,7 +59,7 @@ public class GobanRenderer : MonoBehaviour {
         {
             for (int y = 0; y < sizex; y++)
             {
-                Instantiate(prefabLine, lineOffset + new Vector3(y, 0, x), rotatePitch).localScale = Vector3.one * (sizez - 1);
+                Instantiate(prefabLine, lineOffset + new Vector3(y, 0, x), rotatePitch, transform).localScale = Vector3.one * (sizez - 1);
             }
         }
 
@@ -68,7 +68,7 @@ public class GobanRenderer : MonoBehaviour {
     /// Loops through the stones models and updates their state.
     /// </summary>
     /// <param name="board">The state of the board, a multi-dimensional array of Stone objects.</param>
-    public void Display(PlayController.Stone[,,] board)
+    public void Display(Stone[,,] board)
     {
         //print("Model updating state now...");
         int sizex = board.GetLength(0);
@@ -81,7 +81,7 @@ public class GobanRenderer : MonoBehaviour {
             mesh = GetComponentInChildren<MeshFilter>();
             if(mesh) {
                 mesh.transform.localScale = new Vector3(sizex, .5f, sizey);
-                mesh.transform.position = new Vector3(sizex/2,-.4f,sizey/2);
+                mesh.transform.position = new Vector3((sizex-1)/2f,-.4f,(sizey-1)/2f);
             }
         }
 

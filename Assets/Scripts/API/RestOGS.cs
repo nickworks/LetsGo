@@ -20,37 +20,76 @@ public static class RestOGS {
     private const string clientSecret = @"";
     #endregion
 
-    private const string pathAPI = @"https://online-go.com/api/v1/";
-    private const string pathAuth = @"https://online-go.com/oauth2/token/";
-
-    private static OAuthToken token;
-
-
+    #region Delegate Declarations
     public delegate void OnRestSuccess<T>(T obj);
     public delegate void OnRestSuccess(string text);
     public delegate void OnRestFail(string error);
+    #endregion
+    
+    private static OAuthToken token;
 
-    private static async void PostString(string uri, List<IMultipartFormSection> data = null, OnRestSuccess onSuccess = null, OnRestFail onFail = null, bool sendToken = true, string method = "POST") {
-        if (sendToken && token.expires_in == 0) return; // we lost the token
+    #region OGS Endpoints
+    private const string pathAPI = @"https://online-go.com/api/v1/";
+    private const string pathAuth = @"https://online-go.com/oauth2/token/";
+    
+    public static void Login(string username, string password, OnRestSuccess onSuccess, OnRestFail onFail = null) {
 
-        if (data == null) data = MakeData();
+        List<IMultipartFormSection> data = MakePostData();
+        data.Add("client_id", clientID);
+        data.Add("client_secret", clientSecret);
+        data.Add("grant_type", "password");
+        data.Add("username", username);
+        data.Add("password", password);
 
-        byte[] boundary = UnityWebRequest.GenerateBoundary();
-        UnityWebRequest request = UnityWebRequest.Post(uri, data, boundary);
-        request.method = method;
-        if(sendToken) request.SetRequestHeader("Authorization", $"Bearer {token.access_token}");
+        Post<OAuthToken>(pathAuth, data, (t) => {
+            token = t;
+            Debug.Log(token);
 
-        UnityWebRequestAsyncOperation task = request.SendWebRequest();
-        while (!task.isDone) await Task.Yield();
+            onSuccess("");
 
+        }, onFail, false);
+    }
+    
+    public static void Get_MyProfile(OnRestSuccess<ResponseMyProfile> onSuccess, OnRestFail onFail = null) {
+        Get<ResponseMyProfile>($"{pathAPI}me", onSuccess, onFail);
+    }
+    public static void Get_GamesList(OnRestSuccess<ResponseGameList> onSuccess, OnRestFail onFail = null) {
+        Get<ResponseGameList>($"{pathAPI}me/games", onSuccess, onFail);
+    }
+    public static void Get_FriendsList(OnRestSuccess<ResponseFriendsList> onSuccess, OnRestFail onFail = null) {
+        Get<ResponseFriendsList>($"{pathAPI}me/friends", onSuccess, onFail);
+    }
+    public static void Get_PuzzleList(OnRestSuccess<ResponsePuzzleList> onSuccess, OnRestFail onFail = null) {
+        Get<ResponsePuzzleList>($"{pathAPI}puzzles", onSuccess, onFail);
+    }
+    public static void Get_PuzzleCollectionList(OnRestSuccess<ResponsePuzzleCollection> onSuccess, OnRestFail onFail = null) {
+        Get<ResponsePuzzleCollection>($"{pathAPI}puzzles/collections?ordering=-rating", onSuccess, (string error) => { });
+    }
+    // this loads a specific puzzle
+    public static void Get_Puzzle(int puzzle_id, OnRestSuccess<ResponsePuzzle> onSuccess, OnRestFail onFail = null){
+        Get<ResponsePuzzle>($"{pathAPI}puzzles/{puzzle_id}", onSuccess, onFail);
+    }
+    // this loads the id / name of each puzzle in a collection
+    public static void Get_PuzzleCollectionSummary(int puzzle_id, OnRestSuccess<ResponsePuzzleSummary.Puzzle[]> onSuccess, OnRestFail onFail = null){
+        Get<ResponsePuzzleSummary.Puzzle[]>($"{pathAPI}puzzles/{puzzle_id}/collection_summary", onSuccess, onFail);
+    }
+    public static void Get_PuzzleRate(int puzzle_id, OnRestSuccess<ResponsePuzzleRate> onSuccess, OnRestFail onFail = null){
+        Get<ResponsePuzzleRate>($"{pathAPI}puzzles/{puzzle_id}/rate", onSuccess, onFail);
+    }
+    
+    #endregion
+    #region Internal Stuff
+
+    // analyzes the result of a web request
+    // and calls either onSuccess or onFail
+    private static void RouteResponse(UnityWebRequest request, OnRestSuccess onSuccess, OnRestFail onFail) {
         switch (request.result) {
             case UnityWebRequest.Result.Success:
-
                 if (onSuccess != null) onSuccess(request.downloadHandler.text);
-
                 break;
             case UnityWebRequest.Result.InProgress:
-                // this shouldn't happen
+                // this shouldn't happen?
+                Debug.Log("waiting... [REST in progress]");
                 break;
             case UnityWebRequest.Result.ConnectionError:
             case UnityWebRequest.Result.ProtocolError:
@@ -60,6 +99,29 @@ public static class RestOGS {
                 break;
         }
     }
+
+    // this builds a POST request, sends it,
+    // awaits for a response, and then triggers
+    // either onSuccess or onFail
+    private static async void PostString(string uri, List<IMultipartFormSection> data = null, OnRestSuccess onSuccess = null, OnRestFail onFail = null, bool sendToken = true, string method = "POST")
+    {
+        if (sendToken && token.expires_in == 0) return; // we lost the token
+
+        if (data == null) data = MakePostData();
+
+        byte[] boundary = UnityWebRequest.GenerateBoundary();
+        UnityWebRequest request = UnityWebRequest.Post(uri, data, boundary);
+        request.method = method;
+        if (sendToken) request.SetRequestHeader("Authorization", $"Bearer {token.access_token}");
+
+        UnityWebRequestAsyncOperation task = request.SendWebRequest();
+        while (!task.isDone) await Task.Yield();
+        RouteResponse(request, onSuccess, onFail);
+    }
+
+    // this builds a GET request, sends it,
+    // awaits for a response, and then triggers
+    // either onSuccess or onFail
     private static async void GetString(string uri, OnRestSuccess onSuccess = null, OnRestFail onFail = null, bool sendToken = true) {
         if (sendToken && token.expires_in == 0) return; // we lost the token
 
@@ -69,126 +131,40 @@ public static class RestOGS {
         UnityWebRequestAsyncOperation task = request.SendWebRequest();
 
         while (!task.isDone) await Task.Yield();
-
-        switch (request.result) {
-            case UnityWebRequest.Result.Success:
-
-                if (onSuccess != null) onSuccess(request.downloadHandler.text);
-
-                break;
-            case UnityWebRequest.Result.InProgress:
-                // this shouldn't happen
-                break;
-            case UnityWebRequest.Result.ConnectionError:
-            case UnityWebRequest.Result.ProtocolError:
-            case UnityWebRequest.Result.DataProcessingError:
-                Debug.LogError($"{request.error}");
-                if (onFail != null) onFail(request.error);
-                break;
-        }
+        RouteResponse(request, onSuccess, onFail);
     }
+    // deserializes a GET response into an object
     private static void Get<T>(string uri, OnRestSuccess<T> onSuccess = null, OnRestFail onFail = null, bool sendToken = true) {
         GetString(uri, (string text) => {
-            if (onSuccess != null) onSuccess(JsonConvert.DeserializeObject<T>(text));
+            if (onSuccess != null) {
+                T obj = JsonConvert.DeserializeObject<T>(text);
+                onSuccess(obj);
+            }
         }, onFail, sendToken);
     }
+    // deserializes a POST response into an object
     private static void Post<T>(string uri, List<IMultipartFormSection> data = null, OnRestSuccess<T> onSuccess = null, OnRestFail onFail = null, bool sendToken = true) {
         PostString(uri, data, (string text) => {
-            if (onSuccess != null) onSuccess(JsonConvert.DeserializeObject<T>(text));
+            if (onSuccess != null) {
+                T obj = JsonConvert.DeserializeObject<T>(text);
+                onSuccess(obj);
+            }
         }, onFail, sendToken);
     }
-    public static List<IMultipartFormSection> MakeData(){
+    private static List<IMultipartFormSection> MakePostData(){
         return new List<IMultipartFormSection>();
     }
+    #endregion
+    #region Extension Functions
+    // extends list to allow for easier key / pair additions (strings)
     public static List<IMultipartFormSection> Add(this List<IMultipartFormSection> data, string key, string value){
         data.Add(new MultipartFormDataSection(key, value));
         return data;
     }
+    // extends list to allow for easier key / pair additions (floats)
     public static List<IMultipartFormSection> Add(this List<IMultipartFormSection> data, string key, float value){
         data.Add(new MultipartFormDataSection(key, System.BitConverter.GetBytes(value)));
         return data;
     }
-    public static class API {
-        public static void Get_MyProfile() {
-            Get<ResponseMyProfile>($"{pathAPI}me", (profile) => {
-
-                Debug.Log($"Your overall rating is: {profile.ratings.overall.rating}");
-
-            }, (string error) => { });
-        }
-        public static void Get_GamesList() {
-            Get<ResponseGameList>($"{pathAPI}me/games", (games) => {
-
-                ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
-                if (uiScrollContent) uiScrollContent.ShowMyGames(games.results);
-
-            }, (string error) => { });
-        }
-        public static void Get_FriendsList() {
-            Get<ResponseFriendsList>($"{pathAPI}me/friends", (friends) => {
-
-                ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
-                if (uiScrollContent) uiScrollContent.ShowFriends(friends.results);
-
-
-            }, (string error) => { });
-        }
-        public static void Get_PuzzleList() {
-            Get<ResponsePuzzleList>($"{pathAPI}puzzles", (puzzles) => {
-
-                ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
-                if (uiScrollContent) uiScrollContent.ShowPuzzles(puzzles.results);
-
-            }, (string error) => { });
-        }
-        public static void Get_PuzzleCollectionList() {
-            Get<ResponsePuzzleCollection>($"{pathAPI}puzzles/collections?ordering=-rating", (puzzles) => {
-
-                ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
-                if (uiScrollContent) uiScrollContent.ShowPuzzles(puzzles.results);
-
-            }, (string error) => { });
-        }
-        // this loads a specific puzzle
-        public static void Get_Puzzle(int puzzle_id){
-            Get<ResponsePuzzle>($"{pathAPI}puzzles/{puzzle_id}", (puzzle) => {
-
-                Debug.Log($"The puzzle -- {puzzle.name} -- was created by {puzzle.owner.username}");
-
-            }, (string error) => { });
-        }
-        // this loads the id / name of each puzzle in a collection
-        public static void Get_PuzzleCollectionSummary(int puzzle_id){
-            Get<ResponsePuzzleSummary.Puzzle[]>($"{pathAPI}puzzles/{puzzle_id}/collection_summary", (summary) => {
-
-                Debug.Log($"There are {summary.Length} puzzles in this collection.");
-
-            }, (string error) => { });
-        }
-        public static void Get_PuzzleRate(int puzzle_id){
-            Get<ResponsePuzzleRate>($"{pathAPI}puzzles/{puzzle_id}/rate", (rating) => {
-
-                if(rating.error != ""){
-                    Debug.Log("You have not rated this puzzle.");
-                } else {
-                    Debug.Log($"You rated this puzzle {rating.rating} stars.");
-                }
-
-            }, (string error) => { });
-        }
-        public static void Post_Login(string username, string password) {
-
-            List<IMultipartFormSection> data = MakeData();
-            data.Add("client_id", clientID);
-            data.Add("client_secret", clientSecret);
-            data.Add("grant_type", "password");
-            data.Add("username", username);
-            data.Add("password", password);
-
-            PostString(pathAuth, data, (string text) => {
-                token = OAuthToken.From(text);
-            }, (string error) => { }, false);
-
-        }
-    }
+    #endregion
 }

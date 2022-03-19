@@ -9,6 +9,8 @@ public class ResponsePuzzleCollection {
     public PuzzleCollection[] results;
     [Serializable]
     public class PuzzleCollection {
+
+        [Serializable]
         public class Owner {
             public int id;
             public string username;
@@ -19,7 +21,9 @@ public class ResponsePuzzleCollection {
             public bool professional;
             public string ui_class;
         }
+        [Serializable]
         public class Puzzle {
+            [Serializable]
             public class BoardState {
                 public string white;
                 public string black;

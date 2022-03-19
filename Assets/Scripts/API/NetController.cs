@@ -9,6 +9,9 @@ public class NetController : MonoBehaviour
     public string user = "test-user";
     public string pass = "#dev#";
 
+    [TextArea(1,3)]
+    public string json = "";
+
     public SocketOGS socket { get; private set; }
     void Start(){
         socket = new SocketOGS();
@@ -22,7 +25,6 @@ public class NetController : MonoBehaviour
 [CustomEditor(typeof(NetController))]
 public class NetControllerEditor : Editor {
 
-    string puzzle_id = "0";
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
 
@@ -31,37 +33,41 @@ public class NetControllerEditor : Editor {
         GUILayout.Space(15);
         GUILayout.Label("REST API");
         GUILayout.Space(10);
-        if (GUILayout.Button("Login"))              RestOGS.API.Post_Login(rt.user, rt.pass);
-        if (GUILayout.Button("List My Friends"))    RestOGS.API.Get_FriendsList();
-        if (GUILayout.Button("List My Games"))      RestOGS.API.Get_GamesList();
-        if (GUILayout.Button("Get My Profile"))     RestOGS.API.Get_MyProfile();
-        if (GUILayout.Button("List Puzzles"))       RestOGS.API.Get_PuzzleCollectionList();
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Puzzle ID: ");
-        puzzle_id = GUILayout.TextField(puzzle_id);
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
 
-        int.TryParse(puzzle_id, out int id);
+        if (GUILayout.Button("Login")) RestOGS.Login(rt.user, rt.pass, (s)=>{});
 
-        if (GUILayout.Button("Puzzle"))       RestOGS.API.Get_Puzzle(id);
-        if (GUILayout.Button("Summary"))      RestOGS.API.Get_PuzzleCollectionSummary(id);
-        if (GUILayout.Button("Rating"))       RestOGS.API.Get_PuzzleRate(id);
+        if (GUILayout.Button("List My Friends")) RestOGS.Get_FriendsList((friends) => {
 
-        GUILayout.EndHorizontal();
+            ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
+            if (uiScrollContent) uiScrollContent.ShowFriends(friends.results);
 
+        });
+        if (GUILayout.Button("List My Games")) RestOGS.Get_GamesList((games) => {
 
+            ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
+            if (uiScrollContent) uiScrollContent.ShowMyGames(games.results);
+
+        });
+        if (GUILayout.Button("Get My Profile")) RestOGS.Get_MyProfile(profile => { });
+        if (GUILayout.Button("List Puzzles")) RestOGS.Get_PuzzleCollectionList((puzzles) => {
+
+            ScrollContentMgr uiScrollContent = GameObject.FindObjectOfType<ScrollContentMgr>();
+            if (uiScrollContent) uiScrollContent.ShowPuzzles(puzzles.results);
+
+        });
+        
+        if(GUILayout.Button("Load JSON puzzle")) PlayController.singleton.BeginPuzzle(rt.json);
 
         GUILayout.Space(15);
         GUILayout.Label("Real-time API");
         GUILayout.Space(10);
-        if (GUILayout.Button("Connect Socket"))     rt.socket.Connect();
+        if (GUILayout.Button("Connect Socket")) rt.socket.Connect();
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Start SeekGraph"))   rt.socket.StartSeekGraph();
-        if (GUILayout.Button("Stop SeekGraph"))    rt.socket.StopSeekGraph();
+        if (GUILayout.Button("Start SeekGraph")) rt.socket.StartSeekGraph();
+        if (GUILayout.Button("Stop SeekGraph")) rt.socket.StopSeekGraph();
         GUILayout.EndHorizontal();
         
-        if (GUILayout.Button("Fetch Live Games"))    rt.socket.FetchGames();
+        if (GUILayout.Button("Fetch Live Games")) rt.socket.FetchGames();
         
     }
 }
