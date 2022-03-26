@@ -114,7 +114,7 @@ public class PlayController : MonoBehaviour {
         ApplySGF(puzzle.puzzle.initial_state.black, 1);
         goban.Display(data);
 
-        PanelSwitcher.singleton.ShowHUD();
+        //PanelSwitcher.singleton.ShowHUD();
             //RestOGS.API.Get_PuzzleCollectionSummary(id);
             //RestOGS.API.Get_PuzzleRate(id);
     }
@@ -271,7 +271,7 @@ public class PlayController : MonoBehaviour {
         // update displays:
 
         goban.ChangePlayerTurn(currentPlayerTurn);
-        dummyObject.ChangePlayerTurn(currentPlayerTurn);
+        if(dummyObject) dummyObject.ChangePlayerTurn(currentPlayerTurn);
 
         // OPPONENT_AUTO_TAKE_TURN
         if(currentPlayerTurn != localPlayer && move_tree != null){

@@ -5,8 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Networking;
 
-public class ProfileCard : MonoBehaviour
-{
+public class ProfileCard : MonoBehaviour {
     public TextMeshProUGUI text;
     public Image image;
 

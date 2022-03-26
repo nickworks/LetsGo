@@ -14,12 +14,12 @@ using Newtonsoft.Json.Converters;
 
 
 public enum Ordering {
-        HighestRating,
-        LowestDifficulty,
-        HighestDifficulty,
-        Newest,
-        Oldest
-    }
+    HighestRating,
+    LowestDifficulty,
+    HighestDifficulty,
+    Newest,
+    Oldest
+}
 public static class RestOGS {
 
     #region Don't publish / commit values to repo

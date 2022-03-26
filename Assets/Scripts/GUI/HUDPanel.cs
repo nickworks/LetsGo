@@ -2,15 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HUDPanel : MonoBehaviour
-{
+public class HUDPanel : MonoBehaviour {
     
-    public void Back()
-    {
-        PanelSwitcher.singleton.ShowPuzzle();
+    public void Back() {
+        
     }
-    public void Undo()
-    {
+    public void Undo() {
         PlayController.singleton.PrevTurn();
     }
 }

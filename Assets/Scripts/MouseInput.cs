@@ -64,6 +64,8 @@ public class MouseInput : MonoBehaviour {
 
     private Ray GetSelectionRay(bool draw = false)
     {
+        if(!cam) return new Ray();
+        
         Ray ray = isMouseMode
                     ? cam.ScreenPointToRay(Input.mousePosition)
                     : new Ray(cam.transform.position, cam.transform.forward);
