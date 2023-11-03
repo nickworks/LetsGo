@@ -2,16 +2,17 @@ using System;
 using Newtonsoft.Json;
 
 [Serializable]
-public class ResponseGameQuery
-{
+public class ResponseGameQuery {
+    // these are the parameters for the query:
     public string list;
     public string by;
-    public int size; // ??
-    
     public int from;
     public int limit;
-    public GameOGS[] results = new GameOGS[0];
-
+    // these are the results:
+    public int size; // number of live games
+    
+    public GameOGS[] results = new GameOGS[0]; // games returned
+    [Serializable]
     public class GameOGS {
         public int id;
         public int[] group_ids = new int[0];
@@ -44,6 +45,7 @@ public class ResponseGameQuery
         public bool in_end;
         public object group_ids_map = null; // ??
     }
+    [Serializable]
     public class Player {
         public string username;
         public int id;

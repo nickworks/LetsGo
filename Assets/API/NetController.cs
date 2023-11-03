@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class NetController : MonoBehaviour
-{
+public class NetController : MonoBehaviour {
 
     public string user = "test-user";
     public string pass = "#dev#";
@@ -14,11 +13,12 @@ public class NetController : MonoBehaviour
 
     public SocketOGS socket { get; private set; }
     void Start(){
-        socket = new SocketOGS();
+        //socket = new SocketOGS();
+        //socket.Connect((a,b)=>{});
     }
     void OnDestroy(){
-        socket.Disconnect();
-        socket = null;
+        //socket.Disconnect();
+        //socket = null;
     }
 }
 
@@ -58,13 +58,13 @@ public class NetControllerEditor : Editor {
         GUILayout.Space(15);
         GUILayout.Label("Real-time API");
         GUILayout.Space(10);
-        if (GUILayout.Button("Connect Socket")) rt.socket.Connect();
+        if (GUILayout.Button("Connect Socket")) {} //rt.socket.Connect(()=>{});
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Start SeekGraph")) rt.socket.StartSeekGraph();
         if (GUILayout.Button("Stop SeekGraph")) rt.socket.StopSeekGraph();
         GUILayout.EndHorizontal();
         
-        if (GUILayout.Button("Fetch Live Games")) rt.socket.FetchGames();
+        //if (GUILayout.Button("Fetch Live Games")) rt.socket.FetchGames((games)=>{});
         
     }
 }

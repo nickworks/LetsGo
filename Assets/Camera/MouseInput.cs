@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MouseInput : MonoBehaviour {
 
@@ -21,8 +22,10 @@ public class MouseInput : MonoBehaviour {
     {
         CheckInputMode();
         Ray ray = GetSelectionRay();
-        if (meshMode) MeshUpdate(ray);
-        else GobanUpdate(ray);
+        if(!EventSystem.current.IsPointerOverGameObject()) {
+            if (meshMode) MeshUpdate(ray);
+            else GobanUpdate(ray);
+        }
     }
 
     private void CheckInputMode()
@@ -90,7 +93,7 @@ public class MouseInput : MonoBehaviour {
         
         Debug.DrawRay(ray.origin, ray.direction, Color.yellow);
         float dis = 0;
-
+        
         if (plane.Raycast(ray, out dis))
         {
             Vector3 pos = ray.GetPoint(dis);

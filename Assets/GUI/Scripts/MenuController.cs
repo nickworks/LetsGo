@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 
 public class MenuController : MonoBehaviour {
 
+    static public MenuController singleton {get; private set;}
+
     [System.Serializable]
     public class MenuPanel {
         public UnityEngine.UI.Toggle menuButton;
@@ -14,6 +16,11 @@ public class MenuController : MonoBehaviour {
     }
     public MenuPanel[] panels;
     void Start () {
+        if(singleton != null){
+            Destroy(gameObject);
+            return;
+        }
+        singleton = this;
 
         // hide / show panels when buttons are pressed:
         foreach(MenuPanel p in panels){
@@ -24,7 +31,12 @@ public class MenuController : MonoBehaviour {
             });
         }
 	}
-    void HideAll(){
+    void OnDestroy(){
+        if(singleton == this){
+            singleton = null;
+        }
+    }
+    public void HideAll(){
         foreach(MenuPanel p in panels){
             if(p.panel) p.panel.gameObject.SetActive(false);
         }

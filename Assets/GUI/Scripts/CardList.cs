@@ -16,13 +16,14 @@ public class CardList : MonoBehaviour {
         Clear();
         const float margin = 10;
         float y = -margin;
+        print($"{data.Length} items in array...");
         foreach(TModel datum in data){
             TPrefab newCard = Instantiate(prefab, transform);
             RectTransform rt = newCard.transform as RectTransform;
             rt.anchoredPosition = new Vector2(margin, y);
             y -= (rt.sizeDelta.y + margin); // move down height + 10
             
-            callback(newCard, datum);
+            if(callback != null) callback(newCard, datum);
         }
     }
 }

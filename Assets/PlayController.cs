@@ -71,6 +71,7 @@ public class PlayController : MonoBehaviour {
     public void BeginGame(int x, int y, int z)
     {
         MakeFreshGoban(x, y, z);
+        MenuController.singleton.HideAll();
         NextTurn(); // begin play
     }
     // this deserializes a JSON string
@@ -95,6 +96,7 @@ public class PlayController : MonoBehaviour {
 
         Debug.Log($"The puzzle -- {puzzle.name} -- was created by {puzzle.owner.username}");
 
+        MenuController.singleton.HideAll();
         MakeFreshGoban(puzzle.puzzle.width, puzzle.puzzle.height, 1);
 
         //puzzle.name
